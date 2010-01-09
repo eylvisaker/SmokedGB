@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1FE27EC5-F81B-4463-B4CA-65C158E35286}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SmokedGBSharp</RootNamespace>
+    <AssemblyName>SmokedGBSharp</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>smoked.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CyclicBuffer.cs" />
+    <Compile Include="GameboyAudio.cs" />
+    <Compile Include="frmSmoked.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSmoked.Designer.cs">
+      <DependentUpon>frmSmoked.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gameboy.cs" />
+    <Compile Include="GameboyAudioChannel.cs" />
+    <Compile Include="GameboyVideo.cs" />
+    <Compile Include="MemoryBankControllers\Mbc1.cs" />
+    <Compile Include="MemoryBankControllers\Mbc2.cs" />
+    <Compile Include="MemoryBankControllers\Mbc3.cs" />
+    <Compile Include="MemoryBankControllers\Mbc5.cs" />
+    <Compile Include="MemoryBankControllers\MbcNone.cs" />
+    <Compile Include="MemoryBankControllers\Mmm01.cs" />
+    <Compile Include="MemoryController.cs" />
+    <Compile Include="NewGameboyCpuImpl.cs" />
+    <Compile Include="NewGameboyCpu.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Rom.cs" />
+    <Compile Include="SmokedGB.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmSmoked.resx">
+      <DependentUpon>frmSmoked.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Agate\trunk\AgateLib\AgateLib.csproj">
+      <Project>{9490B719-829E-43A7-A5FE-8001F8A81759}</Project>
+      <Name>AgateLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Agate\trunk\Drivers\AgateDrawing\AgateDrawing.csproj">
+      <Project>{164A785D-924E-40FB-A517-D7E677F3B53A}</Project>
+      <Name>AgateDrawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Agate\trunk\Drivers\AgateLib.WinForms\AgateLib.WinForms.csproj">
+      <Project>{BEF6D67B-4C84-4D3E-8047-6DB2C8754D77}</Project>
+      <Name>AgateLib.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Agate\trunk\Drivers\AgateSDX\AgateSDX.csproj">
+      <Project>{EF993B30-D9A9-4962-80BB-6826D39B3465}</Project>
+      <Name>AgateSDX</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ip.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\breakpoint.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Information\gameboy.faq" />
+    <None Include="Information\GBSOUND2.DOC" />
+    <None Include="Information\Gbsound3.doc" />
+    <None Include="Resources\smoked.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Information\Emu2gb.txt" />
+    <Content Include="Information\GameBoy Opcodes Summary.htm" />
+    <Content Include="Information\gameboy.txt" />
+    <Content Include="Information\Gbspec.txt" />
+    <Content Include="Information\Gmb-spec.txt" />
+    <Content Include="Information\Instr.txt" />
+    <Content Include="Information\Mbc3.txt" />
+    <Content Include="Information\Program.txt" />
+    <Content Include="Information\sgb.txt" />
+    <Content Include="smoked.ico" />
+    <Content Include="TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

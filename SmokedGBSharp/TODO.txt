@@ -1,0 +1,22 @@
+﻿
+Structure
+	Separate MBC's into separate classes
+	Separate Video into GBC video class maybe?
+	Super Gameboy video class?
+	Remove old cpu crap
+	
+Redesign CpuEmulatorGenerator to not use XML
+
+Sound
+	Convert from old C++
+	Implement streaming audio in AgateLib
+
+Super Gameboy support
+	Implement it
+
+Gameboy Color support
+	Fix palette
+	
+Misc
+	Improve performance of PixelBuffer.SetPixel
+	

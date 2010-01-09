@@ -1,0 +1,118 @@
+﻿
+define Cpu:
+	Name: NewGameboyCpu
+	Output: ../../../SmokedGBSharp/NewGameboyCpuImpl.cs
+	Language: CSharp
+	ProgramCounter: PC
+	StackPointer: SP
+	AddressSize: ushort
+	MemorySize: byte
+	define CodePages:
+		cb
+	end
+end
+
+define Registers:
+	byte A
+	byte F
+	byte B
+	byte C
+	byte D
+	byte E
+	byte H
+	byte L
+	ushort AF
+	ushort BC
+	ushort DE
+	ushort HL
+	byte IME
+	byte EI_
+	byte DI_
+	
+	Composite:
+		AF: A, F
+		BC: B, C
+		DE: D, E
+		HL: H, L
+		
+define Flags:
+	Z: F, 7
+	N: F, 6
+	H: F, 5
+	C: F, 4
+
+define table SwapTable:
+	range: 0, 255
+	value: index >> 4 + (index << 4) & 0xff
+
+define OpCodes:
+	// call op codes:
+	cd: 12, Call(##), "CALL ##"
+	c4: 12, Call(##), "CALL NZ,##", !@Z
+	cc: 12, Call(##), "CALL Z,##", @Z
+	d4: 12, Call(##), "CALL NC,##", !@C
+	dc: 12, Call(##), "CALL C,##", @C
+	c7: 32, Call($00), "RST 00"
+	cf: 32, Call($08), "RST 08"
+	d7: 32, Call($10), "RST 10"
+	df: 32, Call($18), "RST 18"
+	e7: 32, Call($20), "RST 20"
+	ef: 32, Call($28), "RST 28"
+	f7: 32, Call($30), "RST 30"
+	ff: 32, Call($38), "RST 38"
+	// Load op codes:
+	3e: 8, Load(A,#), "ld a,#"
+	06: 8, Load(B,#), "ld a,#"
+	0e: 8, Load(C,#), "ld a,#"
+	16: 8, Load(D,#), "ld a,#"
+	1e: 8, Load(E,#), "ld a,#"
+	26: 8, Load(H,#), "ld a,#"
+	2e: 8, Load(L,#), "ld a,#"
+	
+	77: 8, Load((HL),A), "ld (hl),a"
+	70: 8, Load((HL),B), "ld (hl),b"
+	71: 8, Load((HL),C), "ld (hl),c"
+	72: 8, Load((HL),D), "ld (hl),d"
+	73: 8, Load((HL),E), "ld (hl),e"
+	74: 8, Load((HL),H), "ld (hl),h"
+	75: 8, Load((HL),L), "ld (hl),l"
+	36: 8, Load((HL),#), "ld (hl),#"
+	
+
+extern byte halt
+
+sub InitCpu()
+	AF = $0180
+	BC = $0013
+	DE = $00d8
+	HL = $014d
+	PC = $0100
+	SP = $fffe
+	IME = 1
+	EI_ = 0
+	DI_ = 0
+	halt = 0
+end
+
+sub Halt()
+	halt = 1
+end
+
+sub Call(in ushort dest)
+	ushort ret = PC
+	(SP-1) = ret >> 8
+	(SP-2) = ret & $ff
+	SP = SP - 2
+	PC = dest
+end
+
+sub Ret()
+	ushort lb = (SP)
+	ushort hb = (SP+1)
+	PC = hb + lb
+	SP = SP + 2
+end
+
+sub Load(out byte dest, in byte value)
+	dest = value
+end

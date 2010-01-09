@@ -1,0 +1,937 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Cpu Name="NewGameboyCpu">
+  <Output File="../../../SmokedGBSharp/NewGameboyCpuImpl.cs" Language="CSharp" Namespace="SmokedGBSharp"/>
+  <Info>
+    <ProgramCounter Register="PC" />
+    <StackPointer Register="SP" />
+    <Addressing>2</Addressing>
+    <BaseSize>byte</BaseSize>
+    <CodePages>
+      <CodePage>cb</CodePage>
+    </CodePages>
+  </Info>
+  <Registers>
+    <Register Name="A" Type="byte" />
+    <Register Name="F" Type="byte" />
+    <Register Name="B" Type="byte" />
+    <Register Name="C" Type="byte" />
+    <Register Name="D" Type="byte" />
+    <Register Name="E" Type="byte" />
+    <Register Name="H" Type="byte" />
+    <Register Name="L" Type="byte" />
+    <Register Name="IFF" Type="byte" />
+    <Register Name="AF" Type="ushort" Composite="F,A" InitialValue="$01b0"/>
+    <Register Name="BC" Type="ushort" Composite="C,B" InitialValue="$0013"/>
+    <Register Name="DE" Type="ushort" Composite="E,D" InitialValue="$00d8"/>
+    <Register Name="HL" Type="ushort" Composite="L,H" InitialValue="$014d"/>
+    <Register Name="PC" Type="ushort" InitialValue="$0100"/>
+    <Register Name="SP" Type="ushort" InitialValue="$fffe"/>
+    <Register Name="IME" Type="byte" InitialValue="1" />
+    <Register Name="EI_" Type="byte" InitialValue="0" />
+    <Register Name="DI_" Type="byte" InitialValue="0" />
+    <Register Name="halt" Type="byte" InitialValue="0" />
+  </Registers>
+  <Flags>
+    <Flag Name="Z" Bit="7" Register="F" />
+    <Flag Name="N" Bit="6" Register="F" />
+    <Flag Name="H" Bit="5" Register="F" />
+    <Flag Name="C" Bit="4" Register="F" />
+    <Flag Name="IME" Bit="1" Register="IME" />
+  </Flags>
+  <Operations>
+    <Operation Name="EI" Inline="true">
+      <Code WriteTo="EI_" >2</Code>
+    </Operation>
+    <Operation Name="DI" Inline="true">
+      <Code WriteTo="DI_" >2</Code>
+    </Operation>
+    <Operation Name="Call" Parameters="2" Inline="true">
+      <Parameter Name="%1" Type="ushort" />
+      <Variable Name="ret" Type="ushort">PC+%2</Variable>
+      <Code WriteTo="(SP-1)">ret>>$8</Code>
+      <Code WriteTo="(SP-2)">ret.and.$ff</Code>
+      <Code WriteTo="SP">SP-$2</Code>
+      <Code WriteTo="PC">%1</Code>
+    </Operation>
+    <Operation Name="Ret" Parameters="0" Inline="true">
+      <Variable Name="hb" Type="ushort">(SP+1) &lt;&lt; 8</Variable>
+      <Variable Name="lb" Type="ushort">(SP)</Variable>
+      <Code WriteTo="PC">hb+lb</Code>
+      <Code WriteTo="SP">SP+$2</Code>
+    </Operation>
+    <Operation Name="Reti" Parameters="0" Inline="true">
+      <Variable Name="hb" Type="ushort">(SP+1) &lt;&lt; 8</Variable>
+      <Variable Name="lb" Type="ushort">(SP)</Variable>
+      <Code WriteTo="PC">hb+lb</Code>
+      <Code WriteTo="SP">SP+$2</Code>
+      <Code SetFlag="IME"/>
+    </Operation>
+    <Operation Name="Push" Parameters="2" Inline="true">
+      <Code WriteTo="(SP-1)">%1</Code>
+      <Code WriteTo="(SP-2)">%2</Code>
+      <Code>SP-=2</Code>
+    </Operation>
+    <Operation Name="Pop" Parameters="2" Inline="true">
+      <Code WriteTo="%2">(SP)</Code>
+      <Code WriteTo="%1">(SP+1)</Code>
+      <Code>SP+=2</Code>
+    </Operation>
+    <Operation Name="Load" Parameters="2" Inline="true">
+      <Code WriteTo="%1" >%2</Code>
+    </Operation>
+    <Operation Name="Load16" Parameters="2" Inline="true">
+      <Code WriteTo="(%1)" >%2 .and. $ff</Code>
+      <Code WriteTo="(%1+1)" >%2 &gt;&gt; 8</Code>
+    </Operation>
+    <Operation Name="LoadHigh" Parameters="2" Inline="true">
+      <Variable Name="addr" Type="ushort">$FF00+%2</Variable>
+      <Code WriteTo="%1" >(addr)</Code>
+    </Operation>
+    <Operation Name="HighLoad" Parameters="2" Inline="true">
+      <Variable Name="addr" Type="ushort">$FF00+%1</Variable>
+      <Code WriteTo="(addr)" >%2</Code>
+    </Operation>
+    <Operation Name="LoadIncrement" Parameters="3"  Inline="true">
+      <Code WriteTo="%1">%2</Code>
+      <Code >%3++</Code>
+    </Operation>
+    <Operation Name="LoadDecrement" Parameters="3" Inline="true">
+      <Code WriteTo="%1">%2</Code>
+      <Code >%3--</Code>
+    </Operation>
+    <Operation Name="LoadAdd" Parameters="2" Inline="true">
+      <Code WriteTo="HL">%1+%2</Code>
+    </Operation>
+    <Operation Name="Add" Parameters="1" Inline="true">
+      <Variable Name="res" Type="ushort">A + %1</Variable>
+      <Variable Name="aln" Type="byte">A .and. $0F</Variable>
+      <Variable Name="bln" Type="byte">%1 .and. $0F</Variable>
+      <Code Flag="!H">aln + bln &gt; $0F</Code>
+      <Code Flag="!C">res &gt; $FF</Code>
+      <Code ResetFlag="!N"></Code>
+      <Code WriteTo="A">res</Code>
+      <Code Flag="!Z">A==0</Code>
+    </Operation>
+    <Operation Name="AddCarry" Parameters="1" Inline="true">
+      <Variable Name="res" Type="ushort">A + %1 + !C</Variable>
+      <Variable Name="aln" Type="byte">A .and. $0F</Variable>
+      <Variable Name="bln" Type="byte">%1 .and. $0F</Variable>
+      <Code Flag="!H">aln + bln + !C &gt; $0F</Code>
+      <Code Flag="!C">res &gt; $FF</Code>
+      <Code ResetFlag="!N"></Code>
+      <Code WriteTo="A">res</Code>
+      <Code Flag="!Z">A==0</Code>
+    </Operation>
+    <Operation Name="Add16" Parameters="2" Inline="true">
+      <Variable Name="res" Type="uint">%1 + %2</Variable>
+      <Variable Name="aln" Type="byte">%1 .and. $8FF</Variable>
+      <Variable Name="bln" Type="byte">%2 .and. $8FF</Variable>
+      <Code Flag="!H">aln + bln &gt; $8FF</Code>
+      <Code Flag="!C">res &gt; $FFFF</Code>
+      <Code ResetFlag="!N"></Code>
+      <Code WriteTo="%1">res</Code>
+    </Operation>
+    <Operation Name="AddSigned" Parameters="2" Inline="true">
+      <Variable Name="offset" Type="sbyte">%2</Variable>
+      <Code ResetFlag="!Z"/>
+      <Code ResetFlag="!N"/>
+      <Code WriteTo="%1">%1+offset</Code>
+    </Operation>
+    <Operation Name="Sub" Parameters="1" Inline="true">
+      <Variable Name="f1" Type="byte">A - %1</Variable>
+      <Variable Name="f2" Type="byte">A .and. $F</Variable>
+      <Variable Name="f3" Type="byte">%1 .and. $F</Variable>
+      <Code Flag="!H">f2 &lt; f3</Code>
+      <Code Flag="!C">A &lt; %1</Code>
+      <Code SetFlag="!N"></Code>
+      <Code WriteTo="A">f1</Code>
+      <Code Flag="!Z">f1==0</Code>
+    </Operation>
+    <Operation Name="Sbc" Parameters="1" Inline="true">
+      <Variable Name="val" Type="byte">%1 + !C</Variable>
+      <Variable Name="f1" Type="byte">A - val</Variable>
+      <Variable Name="f2" Type="byte">A .and. $F</Variable>
+      <Variable Name="f3" Type="byte">val .and. $F</Variable>
+      <Code Flag="!H">f2 &lt; f3</Code>
+      <Code Flag="!C">A &lt; val</Code>
+      <Code SetFlag="!N"></Code>
+      <Code WriteTo="A">f1</Code>
+      <Code Flag="!Z">f1==0</Code>
+    </Operation>
+    <Operation Name="Cp" Parameters="1" Inline="true">
+      <Variable Name="f1" Type="byte">A - %1</Variable>
+      <Variable Name="f2" Type="byte">A .and. $F</Variable>
+      <Variable Name="f3" Type="byte">%1 .and. $F</Variable>
+      <Code Flag="!H">f2 &lt; f3</Code>
+      <Code Flag="!C">A &lt; %1</Code>
+      <Code SetFlag="!N"></Code>
+      <Code Flag="!Z">f1==0</Code>
+    </Operation>
+    <Operation Name="And" Parameters="1" Inline="true">
+      <Code WriteTo="A">A .and. %1</Code>
+      <Code Flag="!Z">A==0</Code>
+      <Code Flag="!H"/>
+      <Code ResetFlag="!N"/>
+      <Code ResetFlag="!C"/>
+    </Operation>
+    <Operation Name="Or" Parameters="1" Inline="true">
+      <Code WriteTo="A">A .or. %1</Code>
+      <Code Flag="!Z">A==0</Code>
+      <Code ResetFlag="!H"/>
+      <Code ResetFlag="!N"/>
+      <Code ResetFlag="!C"/>
+    </Operation>
+    <Operation Name="Xor" Parameters="1" Inline="true">
+      <Code WriteTo="A">A .xor. %1</Code>
+      <Code Flag="!Z">A==0</Code>
+      <Code ResetFlag="!H"/>
+      <Code ResetFlag="!N"/>
+      <Code ResetFlag="!C"/>
+    </Operation>
+    <Operation Name="Inc" Parameters="1" Inline="true">
+      <Variable Name="f1" Type="byte">%1 .and. $F</Variable>
+      <Code Flag="!H">f1 == $F</Code>
+      <Code ResetFlag="!N"></Code>
+      <Code WriteTo="%1">%1+$1</Code>
+      <Code Flag="!Z">%1==0</Code>
+    </Operation>
+    <Operation Name="Inc16" Parameters="1" Inline="true">
+      <Code WriteTo="%1">%1+$1</Code>
+    </Operation>
+    <Operation Name="Dec16" Parameters="1" Inline="true">
+      <Code WriteTo="%1">%1-$1</Code>
+    </Operation>
+    <Operation Name="Dec" Parameters="1" Inline="true">
+      <Variable Name="f1" Type="byte">%1 .and. $F</Variable>
+      <Code Flag="!H">f1 == $0</Code>
+      <Code SetFlag="!N"></Code>
+      <Code WriteTo="%1">%1-$1</Code>
+      <Code Flag="!Z">%1==0</Code>
+    </Operation>
+    <Operation Name="Nop" Parameters="0" Inline="true" />
+    <Operation Name="Jp" Parameters="1" Inline="true">
+      <Parameter Name="%1" Type="ushort" />
+      <Code WriteTo="PC">%1</Code>
+    </Operation>
+    <Operation Name="Jr" Parameters="1" Inline="true">
+      <Variable Name="offset" Type="sbyte">%1</Variable>
+      <Code WriteTo="PC">PC+offset+1</Code>
+    </Operation>
+    <Operation Name="Cpl" Parameters="1" Inline="true">
+      <Code WriteTo="%1">.not.%1</Code>
+      <Code SetFlag="!N" />
+      <Code Flag="!H" />
+    </Operation>
+    <Operation Name="Ccf" Parameters="0" Inline="true">
+      <Code FlipFlag="!C"></Code>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+    </Operation>
+    <Operation Name="Scf" Parameters="0" Inline="true">
+      <Code Flag="!C" />
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+    </Operation>
+    <Operation Name="Swap" Parameters="1" Inline="true">
+      <Variable Name="hn" Type="byte">%1 &gt;&gt; 4</Variable>
+      <Variable Name="ln" Type="byte">%1 &lt;&lt; 4</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code ResetFlag="!C" />
+      <Code Flag="!Z">%1 == 0</Code>
+      <Code WriteTo="%1">hn .or. ln</Code>
+    </Operation>
+    <Operation Name="RLC" Parameters="1" Inline="true">
+      <Variable Name="carry" Type="byte">%1 .and. $80</Variable>
+      <Variable Name="inp" Type="byte">carry &gt;&gt; 7</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code WriteTo="%1">%1 &lt;&lt; 1</Code>
+      <Code WriteTo="%1">%1+inp</Code>
+      <Code Flag="!Z">%1 == 0</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
+    <Operation Name="RL" Parameters="1" Inline="true">
+      <Variable Name="carry" Type="byte">%1 .and. $80</Variable>
+      <Variable Name="inp" Type="byte">!C</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code WriteTo="%1">%1 &lt;&lt; 1</Code>
+      <Code WriteTo="%1">%1+inp</Code>
+      <Code Flag="!Z">%1 == 0</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
+    <Operation Name="RRC" Parameters="1" Inline="true">
+      <Variable Name="carry" Type="byte">%1 .and. $1</Variable>
+      <Variable Name="inp" Type="byte">carry &lt;&lt; 7</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code WriteTo="%1">%1 &gt;&gt; 1</Code>
+      <Code WriteTo="%1">%1+inp</Code>
+      <Code Flag="!Z">%1 == 0</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
+    <Operation Name="RR" Parameters="1" Inline="true">
+      <Variable Name="carry" Type="byte">%1 .and. $1</Variable>
+      <Variable Name="inp" Type="byte">!C &lt;&lt; 7</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code WriteTo="%1">%1 &gt;&gt; 1</Code>
+      <Code WriteTo="%1">%1+inp</Code>
+      <Code Flag="!Z">%1 == 0</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
+    <Operation Name="SLA" Parameters="1" Inline="true">
+      <Variable Name="carry" Type="byte">%1 .and. $80</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code WriteTo="%1">%1 &lt;&lt; 1</Code>
+      <Code Flag="!Z">%1 == 0</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
+    <Operation Name="SRA" Parameters="1" Inline="true">
+      <Variable Name="carry" Type="byte">%1 .and. $1</Variable>
+      <Variable Name="msb" Type="byte">%1 .and. $80</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code WriteTo="%1">%1 &gt;&gt; 1</Code>
+      <Code WriteTo="%1">%1 + msb</Code>
+      <Code Flag="!Z">%1 == 0</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
+    <Operation Name="SRL" Parameters="1" Inline="true">
+      <Variable Name="carry" Type="byte">%1 .and. $1</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code WriteTo="%1">%1 &gt;&gt; 1</Code>
+      <Code Flag="!Z">%1 == 0</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
+    <Operation Name="Bit" Parameters="2" Inline="true">
+      <Variable Name="mask" Type="byte">$1 &lt;&lt; %1</Variable>
+      <Variable Name="result" Type="byte">%2 .and. mask</Variable>
+      <Code Flag="!Z">result == 0</Code>
+      <Code Flag="!H" />
+      <Code ResetFlag="!N" />
+    </Operation>
+    <Operation Name="SetBit" Parameters="2" Inline="true">
+      <Variable Name="mask" Type="byte">$1 &lt;&lt; %1</Variable>
+      <Code WriteTo="%2">%2 .or. mask</Code>
+    </Operation>
+    <Operation Name="ResetBit" Parameters="2" Inline="true">
+      <Variable Name="mask" Type="byte">$1 &lt;&lt; %1</Variable>
+      <Code WriteTo="mask">.not. mask</Code>
+      <Code WriteTo="%2">%2 .and. mask</Code>
+    </Operation>
+    <Operation Name="Halt" Parameters="0" Inlin="true">
+      <Code WriteTo="halt">1</Code>
+    </Operation>
+  </Operations>
+  <OpCodes>
+    <OpCode Name="halt" Operation="Halt">
+      <Op Parameters="" Code="76" Cycles="4" />
+    </OpCode>
+    <OpCode Name="bit" Operation="Bit">
+      <Op Parameters="0,B"    Code="cb 40" Cycles="8"/>
+      <Op Parameters="0,C"    Code="cb 41" Cycles="8"/>
+      <Op Parameters="0,D"    Code="cb 42" Cycles="8"/>
+      <Op Parameters="0,E"    Code="cb 43" Cycles="8"/>
+      <Op Parameters="0,H"    Code="cb 44" Cycles="8"/>
+      <Op Parameters="0,L"    Code="cb 45" Cycles="8"/>
+      <Op Parameters="0,(HL)" Code="cb 46" Cycles="16"/>
+      <Op Parameters="0,A"    Code="cb 47" Cycles="8"/>
+      <Op Parameters="1,B"    Code="cb 48" Cycles="8"/>
+      <Op Parameters="1,C"    Code="cb 49" Cycles="8"/>
+      <Op Parameters="1,D"    Code="cb 4a" Cycles="8"/>
+      <Op Parameters="1,E"    Code="cb 4b" Cycles="8"/>
+      <Op Parameters="1,H"    Code="cb 4c" Cycles="8"/>
+      <Op Parameters="1,L"    Code="cb 4d" Cycles="8"/>
+      <Op Parameters="1,(HL)" Code="cb 4e" Cycles="16"/>
+      <Op Parameters="1,A"    Code="cb 4f" Cycles="8"/>
+      <Op Parameters="2,B"    Code="cb 50" Cycles="8"/>
+      <Op Parameters="2,C"    Code="cb 51" Cycles="8"/>
+      <Op Parameters="2,D"    Code="cb 52" Cycles="8"/>
+      <Op Parameters="2,E"    Code="cb 53" Cycles="8"/>
+      <Op Parameters="2,H"    Code="cb 54" Cycles="8"/>
+      <Op Parameters="2,L"    Code="cb 55" Cycles="8"/>
+      <Op Parameters="2,(HL)" Code="cb 56" Cycles="16"/>
+      <Op Parameters="2,A"    Code="cb 57" Cycles="8"/>
+      <Op Parameters="3,B"    Code="cb 58" Cycles="8"/>
+      <Op Parameters="3,C"    Code="cb 59" Cycles="8"/>
+      <Op Parameters="3,D"    Code="cb 5a" Cycles="8"/>
+      <Op Parameters="3,E"    Code="cb 5b" Cycles="8"/>
+      <Op Parameters="3,H"    Code="cb 5c" Cycles="8"/>
+      <Op Parameters="3,L"    Code="cb 5d" Cycles="8"/>
+      <Op Parameters="3,(HL)" Code="cb 5e" Cycles="16"/>
+      <Op Parameters="3,A"    Code="cb 5f" Cycles="8"/>
+      <Op Parameters="4,B"    Code="cb 60" Cycles="8"/>
+      <Op Parameters="4,C"    Code="cb 61" Cycles="8"/>
+      <Op Parameters="4,D"    Code="cb 62" Cycles="8"/>
+      <Op Parameters="4,E"    Code="cb 63" Cycles="8"/>
+      <Op Parameters="4,H"    Code="cb 64" Cycles="8"/>
+      <Op Parameters="4,L"    Code="cb 65" Cycles="8"/>
+      <Op Parameters="4,(HL)" Code="cb 66" Cycles="16"/>
+      <Op Parameters="4,A"    Code="cb 67" Cycles="8"/>
+      <Op Parameters="5,B"    Code="cb 68" Cycles="8"/>
+      <Op Parameters="5,C"    Code="cb 69" Cycles="8"/>
+      <Op Parameters="5,D"    Code="cb 6a" Cycles="8"/>
+      <Op Parameters="5,E"    Code="cb 6b" Cycles="8"/>
+      <Op Parameters="5,H"    Code="cb 6c" Cycles="8"/>
+      <Op Parameters="5,L"    Code="cb 6d" Cycles="8"/>
+      <Op Parameters="5,(HL)" Code="cb 6e" Cycles="16"/>
+      <Op Parameters="5,A"    Code="cb 6f" Cycles="8"/>
+      <Op Parameters="6,B"    Code="cb 70" Cycles="8"/>
+      <Op Parameters="6,C"    Code="cb 71" Cycles="8"/>
+      <Op Parameters="6,D"    Code="cb 72" Cycles="8"/>
+      <Op Parameters="6,E"    Code="cb 73" Cycles="8"/>
+      <Op Parameters="6,H"    Code="cb 74" Cycles="8"/>
+      <Op Parameters="6,L"    Code="cb 75" Cycles="8"/>
+      <Op Parameters="6,(HL)" Code="cb 76" Cycles="16"/>
+      <Op Parameters="6,A"    Code="cb 77" Cycles="8"/>
+      <Op Parameters="7,B"    Code="cb 78" Cycles="8"/>
+      <Op Parameters="7,C"    Code="cb 79" Cycles="8"/>
+      <Op Parameters="7,D"    Code="cb 7a" Cycles="8"/>
+      <Op Parameters="7,E"    Code="cb 7b" Cycles="8"/>
+      <Op Parameters="7,H"    Code="cb 7c" Cycles="8"/>
+      <Op Parameters="7,L"    Code="cb 7d" Cycles="8"/>
+      <Op Parameters="7,(HL)" Code="cb 7e" Cycles="16"/>
+      <Op Parameters="7,A"    Code="cb 7f" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="set" Operation="SetBit">
+      <Op Parameters="0,B"    Code="cb c0" Cycles="8"/>
+      <Op Parameters="0,C"    Code="cb c1" Cycles="8"/>
+      <Op Parameters="0,D"    Code="cb c2" Cycles="8"/>
+      <Op Parameters="0,E"    Code="cb c3" Cycles="8"/>
+      <Op Parameters="0,H"    Code="cb c4" Cycles="8"/>
+      <Op Parameters="0,L"    Code="cb c5" Cycles="8"/>
+      <Op Parameters="0,(HL)" Code="cb c6" Cycles="16"/>
+      <Op Parameters="0,A"    Code="cb c7" Cycles="8"/>
+      <Op Parameters="1,B"    Code="cb c8" Cycles="8"/>
+      <Op Parameters="1,C"    Code="cb c9" Cycles="8"/>
+      <Op Parameters="1,D"    Code="cb ca" Cycles="8"/>
+      <Op Parameters="1,E"    Code="cb cb" Cycles="8"/>
+      <Op Parameters="1,H"    Code="cb cc" Cycles="8"/>
+      <Op Parameters="1,L"    Code="cb cd" Cycles="8"/>
+      <Op Parameters="1,(HL)" Code="cb ce" Cycles="16"/>
+      <Op Parameters="1,A"    Code="cb cf" Cycles="8"/>
+      <Op Parameters="2,B"    Code="cb d0" Cycles="8"/>
+      <Op Parameters="2,C"    Code="cb d1" Cycles="8"/>
+      <Op Parameters="2,D"    Code="cb d2" Cycles="8"/>
+      <Op Parameters="2,E"    Code="cb d3" Cycles="8"/>
+      <Op Parameters="2,H"    Code="cb d4" Cycles="8"/>
+      <Op Parameters="2,L"    Code="cb d5" Cycles="8"/>
+      <Op Parameters="2,(HL)" Code="cb d6" Cycles="16"/>
+      <Op Parameters="2,A"    Code="cb d7" Cycles="8"/>
+      <Op Parameters="3,B"    Code="cb d8" Cycles="8"/>
+      <Op Parameters="3,C"    Code="cb d9" Cycles="8"/>
+      <Op Parameters="3,D"    Code="cb da" Cycles="8"/>
+      <Op Parameters="3,E"    Code="cb db" Cycles="8"/>
+      <Op Parameters="3,H"    Code="cb dc" Cycles="8"/>
+      <Op Parameters="3,L"    Code="cb dd" Cycles="8"/>
+      <Op Parameters="3,(HL)" Code="cb de" Cycles="16"/>
+      <Op Parameters="3,A"    Code="cb df" Cycles="8"/>
+      <Op Parameters="4,B"    Code="cb e0" Cycles="8"/>
+      <Op Parameters="4,C"    Code="cb e1" Cycles="8"/>
+      <Op Parameters="4,D"    Code="cb e2" Cycles="8"/>
+      <Op Parameters="4,E"    Code="cb e3" Cycles="8"/>
+      <Op Parameters="4,H"    Code="cb e4" Cycles="8"/>
+      <Op Parameters="4,L"    Code="cb e5" Cycles="8"/>
+      <Op Parameters="4,(HL)" Code="cb e6" Cycles="16"/>
+      <Op Parameters="4,A"    Code="cb e7" Cycles="8"/>
+      <Op Parameters="5,B"    Code="cb e8" Cycles="8"/>
+      <Op Parameters="5,C"    Code="cb e9" Cycles="8"/>
+      <Op Parameters="5,D"    Code="cb ea" Cycles="8"/>
+      <Op Parameters="5,E"    Code="cb eb" Cycles="8"/>
+      <Op Parameters="5,H"    Code="cb ec" Cycles="8"/>
+      <Op Parameters="5,L"    Code="cb ed" Cycles="8"/>
+      <Op Parameters="5,(HL)" Code="cb ee" Cycles="16"/>
+      <Op Parameters="5,A"    Code="cb ef" Cycles="8"/>
+      <Op Parameters="6,B"    Code="cb f0" Cycles="8"/>
+      <Op Parameters="6,C"    Code="cb f1" Cycles="8"/>
+      <Op Parameters="6,D"    Code="cb f2" Cycles="8"/>
+      <Op Parameters="6,E"    Code="cb f3" Cycles="8"/>
+      <Op Parameters="6,H"    Code="cb f4" Cycles="8"/>
+      <Op Parameters="6,L"    Code="cb f5" Cycles="8"/>
+      <Op Parameters="6,(HL)" Code="cb f6" Cycles="16"/>
+      <Op Parameters="6,A"    Code="cb f7" Cycles="8"/>
+      <Op Parameters="7,B"    Code="cb f8" Cycles="8"/>
+      <Op Parameters="7,C"    Code="cb f9" Cycles="8"/>
+      <Op Parameters="7,D"    Code="cb fa" Cycles="8"/>
+      <Op Parameters="7,E"    Code="cb fb" Cycles="8"/>
+      <Op Parameters="7,H"    Code="cb fc" Cycles="8"/>
+      <Op Parameters="7,L"    Code="cb fd" Cycles="8"/>
+      <Op Parameters="7,(HL)" Code="cb fe" Cycles="16"/>
+      <Op Parameters="7,A"    Code="cb ff" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="res" Operation="ResetBit">
+      <Op Parameters="0,B"    Code="cb 80" Cycles="8"/>
+      <Op Parameters="0,C"    Code="cb 81" Cycles="8"/>
+      <Op Parameters="0,D"    Code="cb 82" Cycles="8"/>
+      <Op Parameters="0,E"    Code="cb 83" Cycles="8"/>
+      <Op Parameters="0,H"    Code="cb 84" Cycles="8"/>
+      <Op Parameters="0,L"    Code="cb 85" Cycles="8"/>
+      <Op Parameters="0,(HL)" Code="cb 86" Cycles="16"/>
+      <Op Parameters="0,A"    Code="cb 87" Cycles="8"/>
+      <Op Parameters="1,B"    Code="cb 88" Cycles="8"/>
+      <Op Parameters="1,C"    Code="cb 89" Cycles="8"/>
+      <Op Parameters="1,D"    Code="cb 8a" Cycles="8"/>
+      <Op Parameters="1,E"    Code="cb 8b" Cycles="8"/>
+      <Op Parameters="1,H"    Code="cb 8c" Cycles="8"/>
+      <Op Parameters="1,L"    Code="cb 8d" Cycles="8"/>
+      <Op Parameters="1,(HL)" Code="cb 8e" Cycles="16"/>
+      <Op Parameters="1,A"    Code="cb 8f" Cycles="8"/>
+      <Op Parameters="2,B"    Code="cb 90" Cycles="8"/>
+      <Op Parameters="2,C"    Code="cb 91" Cycles="8"/>
+      <Op Parameters="2,D"    Code="cb 92" Cycles="8"/>
+      <Op Parameters="2,E"    Code="cb 93" Cycles="8"/>
+      <Op Parameters="2,H"    Code="cb 94" Cycles="8"/>
+      <Op Parameters="2,L"    Code="cb 95" Cycles="8"/>
+      <Op Parameters="2,(HL)" Code="cb 96" Cycles="16"/>
+      <Op Parameters="2,A"    Code="cb 97" Cycles="8"/>
+      <Op Parameters="3,B"    Code="cb 98" Cycles="8"/>
+      <Op Parameters="3,C"    Code="cb 99" Cycles="8"/>
+      <Op Parameters="3,D"    Code="cb 9a" Cycles="8"/>
+      <Op Parameters="3,E"    Code="cb 9b" Cycles="8"/>
+      <Op Parameters="3,H"    Code="cb 9c" Cycles="8"/>
+      <Op Parameters="3,L"    Code="cb 9d" Cycles="8"/>
+      <Op Parameters="3,(HL)" Code="cb 9e" Cycles="16"/>
+      <Op Parameters="3,A"    Code="cb 9f" Cycles="8"/>
+      <Op Parameters="4,B"    Code="cb a0" Cycles="8"/>
+      <Op Parameters="4,C"    Code="cb a1" Cycles="8"/>
+      <Op Parameters="4,D"    Code="cb a2" Cycles="8"/>
+      <Op Parameters="4,E"    Code="cb a3" Cycles="8"/>
+      <Op Parameters="4,H"    Code="cb a4" Cycles="8"/>
+      <Op Parameters="4,L"    Code="cb a5" Cycles="8"/>
+      <Op Parameters="4,(HL)" Code="cb a6" Cycles="16"/>
+      <Op Parameters="4,A"    Code="cb a7" Cycles="8"/>
+      <Op Parameters="5,B"    Code="cb a8" Cycles="8"/>
+      <Op Parameters="5,C"    Code="cb a9" Cycles="8"/>
+      <Op Parameters="5,D"    Code="cb aa" Cycles="8"/>
+      <Op Parameters="5,E"    Code="cb ab" Cycles="8"/>
+      <Op Parameters="5,H"    Code="cb ac" Cycles="8"/>
+      <Op Parameters="5,L"    Code="cb ad" Cycles="8"/>
+      <Op Parameters="5,(HL)" Code="cb ae" Cycles="16"/>
+      <Op Parameters="5,A"    Code="cb af" Cycles="8"/>
+      <Op Parameters="6,B"    Code="cb b0" Cycles="8"/>
+      <Op Parameters="6,C"    Code="cb b1" Cycles="8"/>
+      <Op Parameters="6,D"    Code="cb b2" Cycles="8"/>
+      <Op Parameters="6,E"    Code="cb b3" Cycles="8"/>
+      <Op Parameters="6,H"    Code="cb b4" Cycles="8"/>
+      <Op Parameters="6,L"    Code="cb b5" Cycles="8"/>
+      <Op Parameters="6,(HL)" Code="cb b6" Cycles="16"/>
+      <Op Parameters="6,A"    Code="cb b7" Cycles="8"/>
+      <Op Parameters="7,B"    Code="cb b8" Cycles="8"/>
+      <Op Parameters="7,C"    Code="cb b9" Cycles="8"/>
+      <Op Parameters="7,D"    Code="cb ba" Cycles="8"/>
+      <Op Parameters="7,E"    Code="cb bb" Cycles="8"/>
+      <Op Parameters="7,H"    Code="cb bc" Cycles="8"/>
+      <Op Parameters="7,L"    Code="cb bd" Cycles="8"/>
+      <Op Parameters="7,(HL)" Code="cb be" Cycles="16"/>
+      <Op Parameters="7,A"    Code="cb bf" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="ret" Operation="Ret">
+      <Op Parameters="" Code="c9" Cycles="8" />
+      <Op Parameters="" Code="c0" Cycles="8" IfFlagReset="Z" Name="RET NZ" />
+      <Op Parameters="" Code="c8" Cycles="8" IfFlagSet="Z" Name="RET Z"/>
+      <Op Parameters="" Code="d0" Cycles="8" IfFlagReset="C" Name="RET NC"/>
+      <Op Parameters="" Code="d8" Cycles="8" IfFlagSet="C" Name="RET C"/>
+    </OpCode>
+    <OpCode Name="reti" Operation="Reti">
+      <Op Parameters="" Code="d9" Cycles="8" />
+    </OpCode>
+    <OpCode Name="ei" Operation="EI">
+      <Op Parameters="" Code="fb" Cycles="4" />
+    </OpCode>
+    <OpCode Name="di" Operation="DI">
+      <Op Parameters="" Code="f3" Cycles="4" />
+    </OpCode>
+    <OpCode Name="rr" Operation="RR">
+      <Op Parameters="A" Code="1f" Cycles="4"/>
+      <Op Parameters="A" Code="cb 1f" Cycles="8"/>
+      <Op Parameters="B" Code="cb 18" Cycles="8"/>
+      <Op Parameters="C" Code="cb 19" Cycles="8"/>
+      <Op Parameters="D" Code="cb 1a" Cycles="8"/>
+      <Op Parameters="E" Code="cb 1b" Cycles="8"/>
+      <Op Parameters="H" Code="cb 1c" Cycles="8"/>
+      <Op Parameters="L" Code="cb 1d" Cycles="8"/>
+      <Op Parameters="(HL)" Code="cb 1e" Cycles="16"/>
+    </OpCode>
+    <OpCode Name="rrc" Operation="RRC">
+      <Op Parameters="A" Code="0f" Cycles="4"/>
+      <Op Parameters="A" Code="cb 0f" Cycles="8"/>
+      <Op Parameters="B" Code="cb 08" Cycles="8"/>
+      <Op Parameters="C" Code="cb 09" Cycles="8"/>
+      <Op Parameters="D" Code="cb 0a" Cycles="8"/>
+      <Op Parameters="E" Code="cb 0b" Cycles="8"/>
+      <Op Parameters="H" Code="cb 0c" Cycles="8"/>
+      <Op Parameters="L" Code="cb 0d" Cycles="8"/>
+      <Op Parameters="(HL)" Code="cb 0e" Cycles="16"/>
+    </OpCode>
+    <OpCode Name="sla" Operation="SLA">
+      <Op Parameters="A" Code="cb 27" Cycles="8"/>
+      <Op Parameters="B" Code="cb 20" Cycles="8"/>
+      <Op Parameters="C" Code="cb 21" Cycles="8"/>
+      <Op Parameters="D" Code="cb 22" Cycles="8"/>
+      <Op Parameters="E" Code="cb 23" Cycles="8"/>
+      <Op Parameters="H" Code="cb 24" Cycles="8"/>
+      <Op Parameters="L" Code="cb 25" Cycles="8"/>
+      <Op Parameters="(HL)" Code="cb 26" Cycles="16"/>
+    </OpCode>
+    <OpCode Name="sra" Operation="SRA">
+      <Op Parameters="A" Code="cb 2f" Cycles="8"/>
+      <Op Parameters="B" Code="cb 28" Cycles="8"/>
+      <Op Parameters="C" Code="cb 29" Cycles="8"/>
+      <Op Parameters="D" Code="cb 2a" Cycles="8"/>
+      <Op Parameters="E" Code="cb 2b" Cycles="8"/>
+      <Op Parameters="H" Code="cb 2c" Cycles="8"/>
+      <Op Parameters="L" Code="cb 2d" Cycles="8"/>
+      <Op Parameters="(HL)" Code="cb 2e" Cycles="16"/>
+    </OpCode>
+    <OpCode Name="srl" Operation="SRL">
+      <Op Parameters="A" Code="cb 3f" Cycles="8"/>
+      <Op Parameters="B" Code="cb 38" Cycles="8"/>
+      <Op Parameters="C" Code="cb 39" Cycles="8"/>
+      <Op Parameters="D" Code="cb 3a" Cycles="8"/>
+      <Op Parameters="E" Code="cb 3b" Cycles="8"/>
+      <Op Parameters="H" Code="cb 3c" Cycles="8"/>
+      <Op Parameters="L" Code="cb 3d" Cycles="8"/>
+      <Op Parameters="(HL)" Code="cb 3e" Cycles="16"/>
+    </OpCode>
+    <OpCode Name="rl" Operation="RL">
+      <Op Parameters="A" Code="17" Cycles="4"/>
+      <Op Parameters="A" Code="cb 17" Cycles="8"/>
+      <Op Parameters="B" Code="cb 10" Cycles="8"/>
+      <Op Parameters="C" Code="cb 11" Cycles="8"/>
+      <Op Parameters="D" Code="cb 12" Cycles="8"/>
+      <Op Parameters="E" Code="cb 13" Cycles="8"/>
+      <Op Parameters="H" Code="cb 14" Cycles="8"/>
+      <Op Parameters="L" Code="cb 15" Cycles="8"/>
+      <Op Parameters="(HL)" Code="cb 16" Cycles="16"/>
+    </OpCode>
+    <OpCode Name="rlc" Operation="RLC">
+      <Op Parameters="A" Code="07" Cycles="4"/>
+      <Op Parameters="A" Code="cb 07" Cycles="8"/>
+      <Op Parameters="B" Code="cb 00" Cycles="8"/>
+      <Op Parameters="C" Code="cb 01" Cycles="8"/>
+      <Op Parameters="D" Code="cb 02" Cycles="8"/>
+      <Op Parameters="E" Code="cb 03" Cycles="8"/>
+      <Op Parameters="H" Code="cb 04" Cycles="8"/>
+      <Op Parameters="L" Code="cb 05" Cycles="8"/>
+      <Op Parameters="(HL)" Code="cb 06" Cycles="16"/>
+    </OpCode>
+    <OpCode Name="swap" Operation="Swap">
+      <Op Parameters="A" Code="cb 37" Cycles="8"/>
+      <Op Parameters="B" Code="cb 30" Cycles="8"/>
+      <Op Parameters="C" Code="cb 31" Cycles="8"/>
+      <Op Parameters="D" Code="cb 32" Cycles="8"/>
+      <Op Parameters="E" Code="cb 33" Cycles="8"/>
+      <Op Parameters="H" Code="cb 34" Cycles="8"/>
+      <Op Parameters="L" Code="cb 35" Cycles="8"/>
+      <Op Parameters="(HL)" Code="cb 36" Cycles="16"/>
+    </OpCode>
+    <OpCode Name="inc" Operation="Inc16">
+      <Op Parameters="BC" Code="03" Cycles="8" />
+      <Op Parameters="DE" Code="13" Cycles="8" />
+      <Op Parameters="HL" Code="23" Cycles="8" />
+      <Op Parameters="SP" Code="33" Cycles="8" />
+    </OpCode>
+    <OpCode Name="dec" Operation="Dec16">
+      <Op Parameters="BC" Code="0b" Cycles="8" />
+      <Op Parameters="DE" Code="1b" Cycles="8" />
+      <Op Parameters="HL" Code="2b" Cycles="8" />
+      <Op Parameters="SP" Code="3b" Cycles="8" />
+    </OpCode>
+    <OpCode Name="add" Operation="Add16">
+      <Op Parameters="HL,BC" Code="09" Cycles="8" />
+      <Op Parameters="HL,DE" Code="19" Cycles="8" />
+      <Op Parameters="HL,HL" Code="29" Cycles="8" />
+      <Op Parameters="HL,SP" Code="39" Cycles="8" />
+    </OpCode>
+    <OpCode Name="add" Operation="AddSigned">
+      <Op Parameters="SP,#" Code="e8" Cycles="16" />
+    </OpCode>
+    <OpCode Name="scf" Operation="Scf">
+      <Op Parameters="" Code="37" Cycles="4" />
+    </OpCode>
+    <OpCode Name="ccf" Operation="Ccf">
+      <Op Parameters="" Code="3f" Cycles="4" />
+    </OpCode>
+    <OpCode Name="cpl" Operation="Cpl">
+      <Op Parameters="A" Code="2f" Cycles="4" />
+    </OpCode>
+    <OpCode Name="call" Operation="Call">
+      <Op Parameters="##,2" Code="cd" Cycles="12" Name="CALL ##"/>
+      <Op Parameters="##,2" Code="c4" Cycles="12" IfFlagReset="Z" Name="CALL NZ,##" />
+      <Op Parameters="##,2" Code="cc" Cycles="12" IfFlagSet="Z" Name="CALL Z,##"/>
+      <Op Parameters="##,2" Code="d4" Cycles="12" IfFlagReset="C" Name="CALL NC,##"/>
+      <Op Parameters="##,2" Code="dc" Cycles="12" IfFlagSet="C" Name="CALL C,##"/>
+    </OpCode>
+    <OpCode Name="rst" Operation="Call">
+      <Op Parameters="$00,0" Code="c7" Cycles="32" Name="RST 00"/>
+      <Op Parameters="$08,0" Code="cf" Cycles="32" Name="RST 08" />
+      <Op Parameters="$10,0" Code="d7" Cycles="32" Name="RST 10" />
+      <Op Parameters="$18,0" Code="df" Cycles="32" Name="RST 18" />
+      <Op Parameters="$20,0" Code="e7" Cycles="32" Name="RST 20" />
+      <Op Parameters="$28,0" Code="ef" Cycles="32" Name="RST 28" />
+      <Op Parameters="$30,0" Code="f7" Cycles="32" Name="RST 30" />
+      <Op Parameters="$38,0" Code="ff" Cycles="32" Name="RST 38" />
+    </OpCode>
+    <OpCode Name="jr" Operation="Jr">
+      <Op Parameters="#" Code="18" Cycles="8" Name="JR @"/>
+      <Op Parameters="#" Code="20" Cycles="8" Name="JR NZ,@" IfFlagReset="Z"/>
+      <Op Parameters="#" Code="28" Cycles="8" Name="JR Z,@" IfFlagSet="Z"/>
+      <Op Parameters="#" Code="30" Cycles="8" Name="JR NC,@" IfFlagReset="C"/>
+      <Op Parameters="#" Code="38" Cycles="8" Name="JR C,@" IfFlagSet="C"/>
+    </OpCode>
+    <OpCode Name="jp" Operation="Jp">
+      <Op Parameters="##" Code="c3" Cycles="12" />
+      <Op Parameters="##" Code="c2" Cycles="12" Name="JP NZ,##" IfFlagReset="Z"/>
+      <Op Parameters="##" Code="ca" Cycles="12" Name="JP Z,##" IfFlagSet="Z"/>
+      <Op Parameters="##" Code="d2" Cycles="12" Name="JP NC,##" IfFlagReset="C"/>
+      <Op Parameters="##" Code="da" Cycles="12" Name="JP C,##" IfFlagSet="C"/>
+      <Op Parameters="HL" Code="e9" Cycles="4" />
+    </OpCode>
+    <OpCode Name="nop" Operation="Nop">
+      <Op Parameters="" Code="00" Cycles="4" />
+    </OpCode>
+    <OpCode Name="inc" Operation="Inc">
+      <Op Parameters="A" Code="3c" Cycles="4"/>
+      <Op Parameters="B" Code="04" Cycles="4"/>
+      <Op Parameters="C" Code="0c" Cycles="4"/>
+      <Op Parameters="D" Code="14" Cycles="4"/>
+      <Op Parameters="E" Code="1c" Cycles="4"/>
+      <Op Parameters="H" Code="24" Cycles="4"/>
+      <Op Parameters="L" Code="2c" Cycles="4"/>
+      <Op Parameters="(HL)" Code="34" Cycles="12"/>
+    </OpCode>
+    <OpCode Name="dec" Operation="Dec">
+      <Op Parameters="A" Code="3d" Cycles="4"/>
+      <Op Parameters="B" Code="05" Cycles="4"/>
+      <Op Parameters="C" Code="0d" Cycles="4"/>
+      <Op Parameters="D" Code="15" Cycles="4"/>
+      <Op Parameters="E" Code="1d" Cycles="4"/>
+      <Op Parameters="H" Code="25" Cycles="4"/>
+      <Op Parameters="L" Code="2d" Cycles="4"/>
+      <Op Parameters="(HL)" Code="35" Cycles="12"/>
+    </OpCode>
+    <OpCode Name="cp" Operation="Cp">
+      <Op Parameters="A" Code="bf" Cycles="4"/>
+      <Op Parameters="B" Code="b8" Cycles="4"/>
+      <Op Parameters="C" Code="b9" Cycles="4"/>
+      <Op Parameters="D" Code="ba" Cycles="4"/>
+      <Op Parameters="E" Code="bb" Cycles="4"/>
+      <Op Parameters="H" Code="bc" Cycles="4"/>
+      <Op Parameters="L" Code="bd" Cycles="4"/>
+      <Op Parameters="(HL)" Code="be" Cycles="8"/>
+      <Op Parameters="#" Code="fe" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="and" Operation="And">
+      <Op Parameters="A" Code="a7" Cycles="4"/>
+      <Op Parameters="B" Code="a0" Cycles="4"/>
+      <Op Parameters="C" Code="a1" Cycles="4"/>
+      <Op Parameters="D" Code="a2" Cycles="4"/>
+      <Op Parameters="E" Code="a3" Cycles="4"/>
+      <Op Parameters="H" Code="a4" Cycles="4"/>
+      <Op Parameters="L" Code="a5" Cycles="4"/>
+      <Op Parameters="(HL)" Code="a6" Cycles="8"/>
+      <Op Parameters="#" Code="e6" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="or" Operation="Or">
+      <Op Parameters="A" Code="b7" Cycles="4"/>
+      <Op Parameters="B" Code="b0" Cycles="4"/>
+      <Op Parameters="C" Code="b1" Cycles="4"/>
+      <Op Parameters="D" Code="b2" Cycles="4"/>
+      <Op Parameters="E" Code="b3" Cycles="4"/>
+      <Op Parameters="H" Code="b4" Cycles="4"/>
+      <Op Parameters="L" Code="b5" Cycles="4"/>
+      <Op Parameters="(HL)" Code="b6" Cycles="8"/>
+      <Op Parameters="#" Code="f6" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="xor" Operation="Xor">
+      <Op Parameters="A" Code="af" Cycles="4"/>
+      <Op Parameters="B" Code="a8" Cycles="4"/>
+      <Op Parameters="C" Code="a9" Cycles="4"/>
+      <Op Parameters="D" Code="aa" Cycles="4"/>
+      <Op Parameters="E" Code="ab" Cycles="4"/>
+      <Op Parameters="H" Code="ac" Cycles="4"/>
+      <Op Parameters="L" Code="ad" Cycles="4"/>
+      <Op Parameters="(HL)" Code="ae" Cycles="8"/>
+      <Op Parameters="#" Code="ee" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="adc" Operation="AddCarry">
+      <Op Parameters="A" Code="8f" Cycles="4"/>
+      <Op Parameters="B" Code="88" Cycles="4"/>
+      <Op Parameters="C" Code="89" Cycles="4"/>
+      <Op Parameters="D" Code="8a" Cycles="4"/>
+      <Op Parameters="E" Code="8b" Cycles="4"/>
+      <Op Parameters="H" Code="8c" Cycles="4"/>
+      <Op Parameters="L" Code="8d" Cycles="4"/>
+      <Op Parameters="(HL)" Code="8e" Cycles="8"/>
+      <Op Parameters="#" Code="ce" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="add" Operation="Add">
+      <Op Parameters="A" Code="87" Cycles="4"/>
+      <Op Parameters="B" Code="80" Cycles="4"/>
+      <Op Parameters="C" Code="81" Cycles="4"/>
+      <Op Parameters="D" Code="82" Cycles="4"/>
+      <Op Parameters="E" Code="83" Cycles="4"/>
+      <Op Parameters="H" Code="84" Cycles="4"/>
+      <Op Parameters="L" Code="85" Cycles="4"/>
+      <Op Parameters="(HL)" Code="86" Cycles="8"/>
+      <Op Parameters="#" Code="c6" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="sub" Operation="Sub">
+      <Op Parameters="A" Code="97" Cycles="4"/>
+      <Op Parameters="B" Code="90" Cycles="4"/>
+      <Op Parameters="C" Code="91" Cycles="4"/>
+      <Op Parameters="D" Code="92" Cycles="4"/>
+      <Op Parameters="E" Code="93" Cycles="4"/>
+      <Op Parameters="H" Code="94" Cycles="4"/>
+      <Op Parameters="L" Code="95" Cycles="4"/>
+      <Op Parameters="(HL)" Code="96" Cycles="8"/>
+      <Op Parameters="#" Code="d6" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="sbc" Operation="Sbc">
+      <Op Parameters="A" Code="9f" Cycles="4"/>
+      <Op Parameters="B" Code="98" Cycles="4"/>
+      <Op Parameters="C" Code="99" Cycles="4"/>
+      <Op Parameters="D" Code="9a" Cycles="4"/>
+      <Op Parameters="E" Code="9b" Cycles="4"/>
+      <Op Parameters="H" Code="9c" Cycles="4"/>
+      <Op Parameters="L" Code="9d" Cycles="4"/>
+      <Op Parameters="(HL)" Code="9e" Cycles="8"/>
+      <Op Parameters="#" Code="de" Cycles="8"/>
+    </OpCode>
+    <OpCode Name="push" Operation="Push">
+      <Op Parameters="A,F" Code="f5" Cycles="16" Name="PUSH AF"/>
+      <Op Parameters="B,C" Code="c5" Cycles="16" Name="PUSH BC"/>
+      <Op Parameters="D,E" Code="d5" Cycles="16" Name="PUSH DE"/>
+      <Op Parameters="H,L" Code="e5" Cycles="16" Name="PUSH HL"/>
+    </OpCode>
+    <OpCode Name="pop" Operation="Pop">
+      <Op Parameters="A,F" Code="f1" Cycles="12" Name="POP AF"/>
+      <Op Parameters="B,C" Code="c1" Cycles="12" Name="POP BC"/>
+      <Op Parameters="D,E" Code="d1" Cycles="12" Name="POP DE"/>
+      <Op Parameters="H,L" Code="e1" Cycles="12" Name="POP HL"/>
+    </OpCode>
+    <OpCode Name="ldhl" Operation="LoadAdd" >
+      <Op Parameters="SP,#" Code="f8" Cycles="12" />
+    </OpCode>
+    <OpCode Name="ld" Operation="Load">
+      <Op Parameters="A,#" Code="3e" Cycles="8" />
+      <Op Parameters="B,#" Code="06" Cycles="8" />
+      <Op Parameters="C,#" Code="0e" Cycles="8" />
+      <Op Parameters="D,#" Code="16" Cycles="8" />
+      <Op Parameters="E,#" Code="1e" Cycles="8" />
+      <Op Parameters="H,#" Code="26" Cycles="8" />
+      <Op Parameters="L,#" Code="2e" Cycles="8" />
+
+      <Op Parameters="A,A" Code="7f" Cycles="4" />
+      <Op Parameters="A,B" Code="78" Cycles="4" />
+      <Op Parameters="A,C" Code="79" Cycles="4" />
+      <Op Parameters="A,D" Code="7a" Cycles="4" />
+      <Op Parameters="A,E" Code="7b" Cycles="4" />
+      <Op Parameters="A,H" Code="7c" Cycles="4" />
+      <Op Parameters="A,L" Code="7d" Cycles="4" />
+      <Op Parameters="A,(BC)" Code="0a" Cycles="8" />
+      <Op Parameters="A,(DE)" Code="1a" Cycles="8" />
+      <Op Parameters="A,(HL)" Code="7e" Cycles="8" />
+      <Op Parameters="A,(##)" Code="fa" Cycles="16" />
+
+      <Op Parameters="B,A" Code="47" Cycles="4" />
+      <Op Parameters="B,B" Code="40" Cycles="4" />
+      <Op Parameters="B,C" Code="41" Cycles="4" />
+      <Op Parameters="B,D" Code="42" Cycles="4" />
+      <Op Parameters="B,E" Code="43" Cycles="4" />
+      <Op Parameters="B,H" Code="44" Cycles="4" />
+      <Op Parameters="B,L" Code="45" Cycles="4" />
+      <Op Parameters="B,(HL)" Code="46" Cycles="8" />
+
+      <Op Parameters="C,A" Code="4f" Cycles="4" />
+      <Op Parameters="C,B" Code="48" Cycles="4" />
+      <Op Parameters="C,C" Code="49" Cycles="4" />
+      <Op Parameters="C,D" Code="4a" Cycles="4" />
+      <Op Parameters="C,E" Code="4b" Cycles="4" />
+      <Op Parameters="C,H" Code="4c" Cycles="4" />
+      <Op Parameters="C,L" Code="4d" Cycles="4" />
+      <Op Parameters="C,(HL)" Code="4e" Cycles="8" />
+
+      <Op Parameters="D,A" Code="57" Cycles="4" />
+      <Op Parameters="D,B" Code="50" Cycles="4" />
+      <Op Parameters="D,C" Code="51" Cycles="4" />
+      <Op Parameters="D,D" Code="52" Cycles="4" />
+      <Op Parameters="D,E" Code="53" Cycles="4" />
+      <Op Parameters="D,H" Code="54" Cycles="4" />
+      <Op Parameters="D,L" Code="55" Cycles="4" />
+      <Op Parameters="D,(HL)" Code="56" Cycles="8" />
+
+      <Op Parameters="E,A" Code="5f" Cycles="4" />
+      <Op Parameters="E,B" Code="58" Cycles="4" />
+      <Op Parameters="E,C" Code="59" Cycles="4" />
+      <Op Parameters="E,D" Code="5a" Cycles="4" />
+      <Op Parameters="E,E" Code="5b" Cycles="4" />
+      <Op Parameters="E,H" Code="5c" Cycles="4" />
+      <Op Parameters="E,L" Code="5d" Cycles="4" />
+      <Op Parameters="E,(HL)" Code="5e" Cycles="8" />
+
+      <Op Parameters="H,A" Code="67" Cycles="4" />
+      <Op Parameters="H,B" Code="60" Cycles="4" />
+      <Op Parameters="H,C" Code="61" Cycles="4" />
+      <Op Parameters="H,D" Code="62" Cycles="4" />
+      <Op Parameters="H,E" Code="63" Cycles="4" />
+      <Op Parameters="H,H" Code="64" Cycles="4" />
+      <Op Parameters="H,L" Code="65" Cycles="4" />
+      <Op Parameters="H,(HL)" Code="66" Cycles="8" />
+
+      <Op Parameters="L,A" Code="6f" Cycles="4" />
+      <Op Parameters="L,B" Code="68" Cycles="4" />
+      <Op Parameters="L,C" Code="69" Cycles="4" />
+      <Op Parameters="L,D" Code="6a" Cycles="4" />
+      <Op Parameters="L,E" Code="6b" Cycles="4" />
+      <Op Parameters="L,H" Code="6c" Cycles="4" />
+      <Op Parameters="L,L" Code="6d" Cycles="4" />
+      <Op Parameters="L,(HL)" Code="6e" Cycles="8" />
+
+      <Op Parameters="(HL),A" Code="77" Cycles="8" />
+      <Op Parameters="(HL),B" Code="70" Cycles="8" />
+      <Op Parameters="(HL),C" Code="71" Cycles="8" />
+      <Op Parameters="(HL),D" Code="72" Cycles="8" />
+      <Op Parameters="(HL),E" Code="73" Cycles="8" />
+      <Op Parameters="(HL),H" Code="74" Cycles="8" />
+      <Op Parameters="(HL),L" Code="75" Cycles="8" />
+      <Op Parameters="(HL),#" Code="36" Cycles="12" />
+
+      <Op Parameters="(BC),A" Code="02" Cycles="8" />
+      <Op Parameters="(DE),A" Code="12" Cycles="8" />
+      <Op Parameters="(##),A" Code="ea" Cycles="16" />
+
+      <Op Parameters="BC,##" Code="01" Cycles="12" />
+      <Op Parameters="DE,##" Code="11" Cycles="12" />
+      <Op Parameters="HL,##" Code="21" Cycles="12" />
+      <Op Parameters="SP,##" Code="31" Cycles="12" />
+
+      <Op Parameters="SP,HL" Code="f9" Cycles="8" />
+
+      <Op Parameters="A,($FF00+C)" Code="f2" Cycles="8" Name="LDH A,(C)"/>
+      <Op Parameters="($FF00+C),A" Code="e2" Cycles="8" Name="LDH (C),A"/>
+    </OpCode>
+    <OpCode Name="ld" Operation="Load16">
+      <Op Parameters="##,SP" Code="08" Cycles="20" Name="LD (##),SP" />
+    </OpCode>
+    <OpCode Name="ldh" Operation="LoadHigh">
+      <Op Parameters="A,#" Code="f0" Cycles="12" Name="LDH A,(#)"/>
+    </OpCode>
+    <OpCode Name="ldh" Operation="HighLoad">
+      <Op Parameters="#,A" Code="e0" Cycles="12" Name="LDH (#),A"/>
+    </OpCode>
+    <OpCode Name="ldi" Operation="LoadIncrement">
+      <Op Parameters="A,(HL),HL" Code="2a" Cycles="8" Name="LDI A,(HL)"/>
+      <Op Parameters="(HL),A,HL" Code="22" Cycles="8" Name="LDI (HL),A"/>
+    </OpCode>
+    <OpCode Name="ldd" Operation="LoadDecrement">
+      <Op Parameters="A,(HL),HL" Code="3a" Cycles="8" Name="LDD A,(HL)"/>
+      <Op Parameters="(HL),A,HL" Code="32" Cycles="8" Name="LDD (HL),A"/>
+    </OpCode>
+
+  </OpCodes>
+</Cpu>
