@@ -21,7 +21,7 @@ namespace SmokedGBSharp
 			Application.SetCompatibleTextRenderingDefault(true);
 			Application.EnableVisualStyles();
 
-			PassiveModel.Run(args, () =>
+			new PassiveModel(args).Run(() =>
 			{
 				new SmokedGB().Run();
 			});
