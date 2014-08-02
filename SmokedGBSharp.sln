@@ -13,6 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgateLib.GL", "Agate\AgateL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgateLib.Platform.WindowsForms", "Agate\AgateLib.Platform.WindowsForms\AgateLib.Platform.WindowsForms.csproj", "{4B12561E-D37B-48A1-B6DB-218E94906C22}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5841AFCA-33FD-493F-A222-80B069E7A758}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -7,6 +7,7 @@ using AgateLib.DisplayLib;
 using AgateLib.InputLib;
 using AgateLib.Geometry;
 using AgateLib.Platform.WindowsForms.ApplicationModels;
+using AgateLib.InputLib.Legacy;
 
 namespace SmokedGBSharp
 {

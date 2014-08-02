@@ -41,7 +41,7 @@ namespace SmokedGBSharp
 
 			RefreshRecentMenu();
 
-			AgateLib.InputLib.Keyboard.KeyDown += new AgateLib.InputLib.InputEventHandler(Keyboard_KeyDown);
+			AgateLib.InputLib.Legacy.Keyboard.KeyDown += new AgateLib.InputLib.Legacy.InputEventHandler(Keyboard_KeyDown);
 
 			SetStatus("");
 		}
@@ -51,7 +51,7 @@ namespace SmokedGBSharp
 			status1.Text = p;
 		}
 
-		void Keyboard_KeyDown(AgateLib.InputLib.InputEventArgs e)
+		void Keyboard_KeyDown(AgateLib.InputLib.Legacy.InputEventArgs e)
 		{
 			switch (e.KeyCode)
 			{
