@@ -62,7 +62,7 @@
 			this.grpMemory = new System.Windows.Forms.GroupBox();
 			this.vsbMemory = new System.Windows.Forms.VScrollBar();
 			this.lstMemory = new System.Windows.Forms.PictureBox();
-			this.agateRenderTarget1 = new AgateLib.Platform.WindowsForms.WinForms.AgateRenderTarget();
+			this.agateRenderTarget1 = new AgateLib.Platform.WinForms.Controls.AgateRenderTarget();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
@@ -404,7 +404,7 @@
 
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-		private AgateLib.Platform.WindowsForms.WinForms.AgateRenderTarget agateRenderTarget1;
+		private AgateLib.Platform.WinForms.Controls.AgateRenderTarget agateRenderTarget1;
 		private System.Windows.Forms.OpenFileDialog openFile;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.Label lblRegisters;
