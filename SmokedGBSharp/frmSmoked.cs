@@ -654,7 +654,7 @@ namespace SmokedGBSharp
 
 		private void lstMemory_Paint(object sender, PaintEventArgs e)
 		{
-			if (gmb == null || gmb.Cpu == null)
+			if (gmb == null || gmb.Cpu == null || gmb.Cpu.Memory == null)
 				return;
 
 			PointF loc = new PointF();
