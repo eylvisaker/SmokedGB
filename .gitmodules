@@ -1,0 +1,3 @@
+[submodule "Agate"]
+	path = Agate
+	url = http://github.org/eylvisaker/AgateLib
