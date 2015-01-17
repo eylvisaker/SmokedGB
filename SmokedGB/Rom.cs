@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AgateLib.Quality;
 
 /*
 00- ROM                      01- MBC1                02- MBC1+RAM
@@ -17,7 +18,7 @@ using System.Text;
 1E- MBC5+RUMBLE+RAM+BATTERY  FC- POCKET CAMERA       FD- Bandai TAMA5
 FE- HuC3                     FF- HuC1+RAM+BATTERY
 */
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	public class Rom
 	{
@@ -45,6 +46,9 @@ namespace SmokedGBSharp
 
 		public Rom(byte[] buffer, byte[] sRam, string FileName)
 		{
+			Condition.Requires<ArgumentNullException>(buffer != null);
+			Condition.Requires<ArgumentNullException>(FileName != null);
+
 			int currentPos = 0x0134;
 			string crlf = Environment.NewLine;
 

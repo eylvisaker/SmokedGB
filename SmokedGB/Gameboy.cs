@@ -6,7 +6,7 @@ using AgateLib.Geometry;
 using AgateLib.InputLib;
 using AgateLib.AudioLib;
 
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	public class Gameboy
 	{

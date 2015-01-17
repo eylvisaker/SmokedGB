@@ -1,4 +1,4 @@
-﻿namespace SmokedGBSharp
+﻿namespace SmokedGB
 {
 	partial class frmSmoked
 	{

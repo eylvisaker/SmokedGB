@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SmokedGBSharp.MemoryBankControllers
+namespace SmokedGB.MemoryBankControllers
 {
 	class Mbc3 : MemoryController 
 	{

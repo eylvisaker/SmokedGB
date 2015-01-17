@@ -9,7 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using AgateLib;
 
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	public partial class frmSmoked : Form
 	{

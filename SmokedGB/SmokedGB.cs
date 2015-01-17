@@ -9,7 +9,7 @@ using AgateLib.Geometry;
 using AgateLib.InputLib.Legacy;
 using AgateLib.Platform.WinForms.ApplicationModels;
 
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	class SmokedGB
 	{

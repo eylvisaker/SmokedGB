@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	public partial class GameboyCpu 
 	{

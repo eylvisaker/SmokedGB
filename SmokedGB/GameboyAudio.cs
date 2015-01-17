@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using AgateLib.AudioLib;
 
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	public class GameboyAudio
 	{

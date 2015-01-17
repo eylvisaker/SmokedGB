@@ -4,7 +4,7 @@ using System.IO;
 using AgateLib.AudioLib;
 
 
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	class GameboyAudioChannel
 	{

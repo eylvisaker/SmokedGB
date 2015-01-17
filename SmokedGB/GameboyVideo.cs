@@ -5,7 +5,7 @@ using AgateLib;
 using AgateLib.DisplayLib;
 using AgateLib.Geometry;
 
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	public class GameboyVideo
 	{

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace SmokedGBSharp
+namespace SmokedGB
 {
 	public partial class GameboyCpu
 	{
