@@ -22,19 +22,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{7AF43E
 		.build\MSBuild.Community.Tasks.targets = .build\MSBuild.Community.Tasks.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{800487FB-F586-4834-99E1-503908A70B94}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agate", "Agate", "{64019EA4-A139-480A-AEAA-98E634522E12}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokedGB.UnitTests", "SmokedGB.UnitTests\SmokedGB.UnitTests.csproj", "{476DE15C-3AEE-4F8D-A239-669631AB1CF3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8ADBADD-20EB-4F2F-8DFB-348EE8FC5F3D}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		sonar-project.properties = sonar-project.properties
 		TestCoverage.bat = TestCoverage.bat
 		UnitTest.bat = UnitTest.bat

@@ -2,3 +2,6 @@
 */bin/
 SmokedGBSharp.sln.ide/
 SmokedGB.sln.ide/
+*.nupkg
+**/packages/*
+!**/packages/build/
