@@ -1,1 +1,0 @@
-OpenCover.Console.exe "-target:C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\MSTest.exe" -targetargs:/testcontainer:SmokedGB.UnitTests\bin\Debug\SmokedGB.UnitTests.dll -targetargs:/noisolation -output:testcoverage.xml
