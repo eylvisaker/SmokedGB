@@ -11,4 +11,4 @@ if %ERRORLEVEL% NEQ 0 exit /b %ERRORLEVEL%
 
 cd ..
 
-msbuild.exe SmokedGB.sln /T:rebuild /P:Configuration=%1
+msbuild.exe SmokedGB.sln /T:rebuild /P:Configuration=%1 "/P:Platform=Any Cpu"
