@@ -7,13 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokedGB", "SmokedGB\Smoked
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CpuEmulatorGenerator", "CpuEmulatorGenerator\CpuEmulatorGenerator.csproj", "{BA81D960-E683-48DA-9F08-14B6123B3511}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{7AF43E6F-EB32-4C04-B235-5CA76E35ABDF}"
-	ProjectSection(SolutionItems) = preProject
-		Build.proj = Build.proj
-		.build\MSBuild.Community.Tasks.dll = .build\MSBuild.Community.Tasks.dll
-		.build\MSBuild.Community.Tasks.targets = .build\MSBuild.Community.Tasks.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokedGB.UnitTests", "SmokedGB.UnitTests\SmokedGB.UnitTests.csproj", "{476DE15C-3AEE-4F8D-A239-669631AB1CF3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8ADBADD-20EB-4F2F-8DFB-348EE8FC5F3D}"
