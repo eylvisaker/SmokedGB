@@ -36,6 +36,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AgateLib, Version=2.0.26.15263, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AgateLib.2.0.26.15263\lib\portable-net45+win+wpa81+wp80\AgateLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AgateLib.Platform.Test, Version=2.0.30.15269, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AgateLib.Platform.Test.2.0.30.15269\lib\portable-net45+win+wpa81+wp80\AgateLib.Platform.Test.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -55,14 +63,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Agate\AgateLib\AgateLib.csproj">
-      <Project>{9490b719-829e-43a7-a5fe-8001f8a81759}</Project>
-      <Name>AgateLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SmokedGB\SmokedGB.csproj">
       <Project>{1fe27ec5-f81b-4463-b4ca-65c158e35286}</Project>
       <Name>SmokedGB</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
