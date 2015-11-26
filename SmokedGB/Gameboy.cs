@@ -8,7 +8,7 @@ using AgateLib.AudioLib;
 
 namespace SmokedGB
 {
-	public class Gameboy
+	public class Gameboy : IGameboy
 	{
 		bool mIsGbc;
 		double mTotalCpuSeconds;
@@ -102,7 +102,9 @@ namespace SmokedGB
 
 			rom = theRom;
 			mIsGbc = (rom.System & GameboySystemTypes.ColorGameboy) != 0;
-			rom.MemoryController.theGameboy = this;
+			rom.MemoryController.TheGameboy = this;
+            rom.MemoryController.aud = aud;
+            rom.MemoryController.Cpu = Cpu;
 			Paused = true;
 
 			Cpu.Initialize(this);
@@ -119,7 +121,7 @@ namespace SmokedGB
 		{
 			EndThread();
 
-			Cpu.mem.CopyMemoryToSaveRam();
+			Cpu.Memory.CopyMemoryToSaveRam();
 
 			if (rom != null)
 				rom.Dispose();
@@ -198,19 +200,19 @@ namespace SmokedGB
 			if (Cpu.InterruptMasterFlag == false)
 				return;
 
-			if ((Cpu.mem[0xff0f] & 0x0f) == 0)
+			if ((Cpu.Memory[0xff0f] & 0x0f) == 0)
 				return;
 
 			for (int i = 0; i < interruptOrder.Length; i++)
 			{
-				int icheck = Cpu.mem[0xff0f] & Cpu.mem[0xffff];
+				int icheck = Cpu.Memory[0xff0f] & Cpu.Memory[0xffff];
 				bool flag = ((icheck >> i) & 0x01) != 0;
 
 				if (flag)
 				{
 					Cpu.Interrupt(interruptOrder[i]);
 
-					Cpu.mem[0xff0f] = (byte)(Cpu.mem[0xff0f] & ~(0x01 << i));
+					Cpu.Memory[0xff0f] = (byte)(Cpu.Memory[0xff0f] & ~(0x01 << i));
 					break;
 				}
 			}
@@ -224,9 +226,9 @@ namespace SmokedGB
 		#endregion
 		#region --- Interrupts ---
 
-		internal void UpdateTimerFrequency()
+		public void UpdateTimerFrequency()
 		{
-			int timerFrequency = timerFrequencies[Cpu.mem[0xff07] & 3];
+			int timerFrequency = timerFrequencies[Cpu.Memory[0xff07] & 3];
 			timerPeriod = 1000000.0 / timerFrequency;
 
 		}
@@ -239,27 +241,27 @@ namespace SmokedGB
 			{
 				divider -= dividerPeriod;
 
-				int value = Cpu.mem[0xff04];
+				int value = Cpu.Memory[0xff04];
 
-				Cpu.mem.MemWrite(0xff04, (byte)(value + 1));
+				Cpu.Memory.MemWrite(0xff04, (byte)(value + 1));
 
 				TimeToNextPassTime(dividerPeriod - divider);
 			}
 
 			// timer register
-			if ((Cpu.mem[0xff07] & 4) != 0)
+			if ((Cpu.Memory[0xff07] & 4) != 0)
 			{
 				timer += us;
 				if (timer >= timerPeriod)
 				{
 					timer -= timerPeriod;
 
-					Cpu.mem[0xff05] += 1;
+					Cpu.Memory[0xff05] += 1;
 
-					if (Cpu.mem[0xff05] == 0)
+					if (Cpu.Memory[0xff05] == 0)
 					{
 						RequestInterrupt(Interrupt.TIMER);
-						Cpu.mem[0xff05] = Cpu.mem[0xff06];
+						Cpu.Memory[0xff05] = Cpu.Memory[0xff06];
 					}
 				}
 
@@ -273,34 +275,34 @@ namespace SmokedGB
 
 		bool AllowVBlankInterrupt
 		{
-			get { return (Cpu.mem[0xffff] & 1) != 0; }
+			get { return (Cpu.Memory[0xffff] & 1) != 0; }
 		}
 		bool AllowLcdcInterrupt
 		{
-			get { return (Cpu.mem[0xffff] & 2) != 0; }
+			get { return (Cpu.Memory[0xffff] & 2) != 0; }
 		}
 		bool AllowTimerInterrupt
 		{
-			get { return (Cpu.mem[0xffff] & 4) != 0; }
+			get { return (Cpu.Memory[0xffff] & 4) != 0; }
 		}
 		bool AllowSerialIOInterrupt
 		{
-			get { return (Cpu.mem[0xffff] & 8) != 0; }
+			get { return (Cpu.Memory[0xffff] & 8) != 0; }
 		}
 		bool AllowJoystickInterrupt
 		{
-			get { return (Cpu.mem[0xffff] & 16) != 0; }
+			get { return (Cpu.Memory[0xffff] & 16) != 0; }
 		}
 
 		public void RequestInterrupt(Interrupt interrupt)
 		{
 			switch (interrupt)
 			{
-				case Interrupt.VBLANK: Cpu.mem[0xff0f] |= 1; break;
-				case Interrupt.LCDC: Cpu.mem[0xff0f] |= 2; break;
-				case Interrupt.TIMER: Cpu.mem[0xff0f] |= 4; break;
-				case Interrupt.SERIAL: Cpu.mem[0xff0f] |= 8; break;
-				case Interrupt.JOYPAD: Cpu.mem[0xff0f] |= 16; break;
+				case Interrupt.VBLANK: Cpu.Memory[0xff0f] |= 1; break;
+				case Interrupt.LCDC: Cpu.Memory[0xff0f] |= 2; break;
+				case Interrupt.TIMER: Cpu.Memory[0xff0f] |= 4; break;
+				case Interrupt.SERIAL: Cpu.Memory[0xff0f] |= 8; break;
+				case Interrupt.JOYPAD: Cpu.Memory[0xff0f] |= 16; break;
 			}
 		}
 
@@ -320,7 +322,7 @@ namespace SmokedGB
 
 		public void CheckJoysticks()
 		{
-			byte inRegister = Cpu.mem[0xff00];
+			byte inRegister = Cpu.Memory[0xff00];
 			byte value = (byte)~inRegister;
 			value &= 0xf0;
 
@@ -368,7 +370,7 @@ namespace SmokedGB
 				}
 			}
 
-			Cpu.mem.MemWrite(0xff00, (byte)~value);
+			Cpu.Memory.MemWrite(0xff00, (byte)~value);
 		}
 
 		#endregion

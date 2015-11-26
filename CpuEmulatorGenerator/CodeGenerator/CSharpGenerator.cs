@@ -548,7 +548,7 @@ namespace CpuEmulatorGenerator.CodeGenerator
 
 		internal void WriteConstant(string type, string name, string value)
 		{
-			Write("const ");
+			Write("public const ");
 			Write(type);
 			Write(" ");
 			Write(name);

@@ -7,7 +7,7 @@ using AgateLib.AudioLib;
 
 namespace SmokedGB
 {
-	public class GameboyAudio
+	public class GameboyAudio : IGameboyAudio
 	{
 		Gameboy theGameboy;
 		GameboyCpu cpu;
@@ -266,7 +266,7 @@ namespace SmokedGB
 						chan.timeCounter += TimePerSample;
 
 						// write buffer
-						if ((theGameboy.Cpu.mem[0xff26] & 128) != 0)
+						if ((theGameboy.Cpu.Memory[0xff26] & 128) != 0)
 						{
 							// square wave pattern:
 							int sign =
@@ -340,7 +340,7 @@ namespace SmokedGB
 
 		void LoadChannelData(int index, int baseAddr, bool resetInitial)
 		{
-			var mem = theGameboy.Cpu.mem;
+			var mem = theGameboy.Cpu.Memory;
 			GameboyAudioChannel chan = gac[index];
 
 			gac[index].sampleAmplitude = 0x0f;
@@ -481,7 +481,7 @@ namespace SmokedGB
 		void SoundDataToGbMemory()
 		{
 			int i;
-			var mem = theGameboy.Cpu.mem;
+			var mem = theGameboy.Cpu.Memory;
 
 			int val = mem[0xff26] & 0xF0;
 
@@ -497,7 +497,7 @@ namespace SmokedGB
 		void LoadSoundData()
 		{
 			int lGain, rGain;
-			var mem = theGameboy.Cpu.mem;
+			var mem = theGameboy.Cpu.Memory;
 
 			lGain = (mem[0xff24] & 0x07);
 			rGain = (mem[0xff24] & 0x70) >> 4;

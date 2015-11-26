@@ -99,6 +99,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IGameboy.cs" />
+    <Compile Include="IGameboyAudio.cs" />
+    <Compile Include="IGameboyCpu.cs" />
+    <Compile Include="IMemoryController.cs" />
+    <Compile Include="PassTimeEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

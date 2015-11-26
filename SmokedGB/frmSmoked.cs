@@ -157,15 +157,15 @@ namespace SmokedGB
 			if (lastVr == null)
 			{
 				lastVr = new VideoRegisters();
-				GameboyVideo.LoadRegisters(lastVr, cpu.mem);
-				GameboyVideo.LoadRegisters(vr, cpu.mem);
+				GameboyVideo.LoadRegisters(lastVr, cpu.Memory);
+				GameboyVideo.LoadRegisters(vr, cpu.Memory);
 			}
 			else
 			{
 				VideoRegisters t = lastVr;
 				lastVr = vr;
 				vr = t;
-				GameboyVideo.LoadRegisters(vr, cpu.mem);
+				GameboyVideo.LoadRegisters(vr, cpu.Memory);
 			}
 
 			lastRegisters = this.registers;
@@ -220,12 +220,12 @@ namespace SmokedGB
 			int pt = registers.SP;
 			for (int i = 0; i < 20; i++)
 			{
-				if (pt >= gmb.Cpu.mem.Length - 1)
+				if (pt >= gmb.Cpu.Memory.Length - 1)
 					break;
 
 				pair p = new pair();
-				p.l = gmb.Cpu.mem[pt];
-				p.h = gmb.Cpu.mem[pt+1];
+				p.l = gmb.Cpu.Memory[pt];
+				p.h = gmb.Cpu.Memory[pt+1];
 
 				text += p.W.ToString("X4");
 				text += " ";
@@ -333,14 +333,14 @@ namespace SmokedGB
 			{
 				StringBuilder b = new StringBuilder();
 
-				if (pc >= gmb.Cpu.mem.Length)
+				if (pc >= gmb.Cpu.Memory.Length)
 				{
 					dasm[i] = string.Empty;
 					dasmAddr[i] = pc;
 					continue;
 				}
 
-				InstructionInfo info = gmb.Cpu.Dasm(gmb.Cpu.mem, pc);
+				InstructionInfo info = gmb.Cpu.Dasm(gmb.Cpu.Memory, pc);
 
 				string d = info.Text;
 				int bytes = info.Size;
@@ -352,7 +352,7 @@ namespace SmokedGB
 				{
 					if (j < bytes)
 					{
-						b.Append(gmb.Cpu.mem[pc + j].ToString("X2"));
+						b.Append(gmb.Cpu.Memory[pc + j].ToString("X2"));
 						b.Append(" ");
 					}
 					else
@@ -665,7 +665,7 @@ namespace SmokedGB
 				int index = vsbMemory.Value + p;
 				index <<= 3;
 
-				if (index >= gmb.Cpu.mem.Length)
+				if (index >= gmb.Cpu.Memory.Length)
 					break;
 
 				StringBuilder b = new StringBuilder();
@@ -675,10 +675,10 @@ namespace SmokedGB
 
 				for (int i = 0; i < 8; i++)
 				{
-					if (index + i >= gmb.Cpu.mem.Length)
+					if (index + i >= gmb.Cpu.Memory.Length)
 						break;
 
-					b.Append(gmb.Cpu.mem[index + i].ToString("X2"));
+					b.Append(gmb.Cpu.Memory[index + i].ToString("X2"));
 					b.Append(" ");
 
 					if (i == 3)

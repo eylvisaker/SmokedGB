@@ -386,7 +386,7 @@ namespace SmokedGB
 		{
 			LoadRegisters(vr, mem);
 		}
-		public static void LoadRegisters(VideoRegisters vr, MemoryController mem)
+		public static void LoadRegisters(VideoRegisters vr, IMemoryController mem)
 		{
 			vr.lcdc = mem[0xFF40];
 			vr.stat = mem[0xFF41];

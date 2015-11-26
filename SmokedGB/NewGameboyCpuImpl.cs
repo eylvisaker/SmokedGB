@@ -13,7 +13,7 @@ namespace SmokedGB
 
 		#region --- OpCode ---
 
-		enum OpCode
+		public  enum OpCode
 		{
 			HALT = 0x76,
 			RET = 0xc9,
@@ -264,7 +264,7 @@ namespace SmokedGB
 
 		#region --- OpCodeCB ---
 
-		enum OpCodeCB
+		public  enum OpCodeCB
 		{
 			BIT_0_B = 0x40,
 			BIT_0_C = 0x41,
@@ -1582,16 +1582,16 @@ namespace SmokedGB
 
 		#endregion
 
-		const uint FlagSet_Z = 0x0080;
-		const uint FlagSet_N = 0x0040;
-		const uint FlagSet_H = 0x0020;
-		const uint FlagSet_C = 0x0010;
-		const uint FlagSet_IME = 0x0002;
-		const uint FlagReset_Z = 0xFFFFFF7F;
-		const uint FlagReset_N = 0xFFFFFFBF;
-		const uint FlagReset_H = 0xFFFFFFDF;
-		const uint FlagReset_C = 0xFFFFFFEF;
-		const uint FlagReset_IME = 0xFFFFFFFD;
+		public const uint FlagSet_Z = 0x0080;
+		public const uint FlagSet_N = 0x0040;
+		public const uint FlagSet_H = 0x0020;
+		public const uint FlagSet_C = 0x0010;
+		public const uint FlagSet_IME = 0x0002;
+		public const uint FlagReset_Z = 0xFFFFFF7F;
+		public const uint FlagReset_N = 0xFFFFFFBF;
+		public const uint FlagReset_H = 0xFFFFFFDF;
+		public const uint FlagReset_C = 0xFFFFFFEF;
+		public const uint FlagReset_IME = 0xFFFFFFFD;
 		int cpuCycles;
 
 		public void ExecOpCode()
@@ -9403,6 +9403,8 @@ namespace SmokedGB
 		public byte H;
 		[FieldOffset(6)]
 		public byte L;
+		[FieldOffset(8)]
+		public byte IFF;
 		[FieldOffset(0)]
 		public ushort AF;
 		[FieldOffset(2)]

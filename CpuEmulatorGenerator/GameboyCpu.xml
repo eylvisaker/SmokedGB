@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Cpu Name="NewGameboyCpu">
-  <Output File="../../../SmokedGBSharp/NewGameboyCpuImpl.cs" Language="CSharp" Namespace="SmokedGBSharp"/>
+<Cpu Name="GameboyCpu">
+  <Output File="../../../SmokedGB/NewGameboyCpuImpl.cs" Language="CSharp" Namespace="SmokedGB"/>
   <Info>
     <ProgramCounter Register="PC" />
     <StackPointer Register="SP" />

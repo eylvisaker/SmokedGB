@@ -44,6 +44,9 @@
       <HintPath>..\packages\AgateLib.Platform.Test.2.0.30.15269\lib\portable-net45+win+wpa81+wp80\AgateLib.Platform.Test.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -59,7 +62,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="CpuTests\AddTest.cs" />
+    <Compile Include="CpuTests\CpuTest.cs" />
+    <Compile Include="Fakes\FakeMemoryController.cs" />
+    <Compile Include="MemoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
