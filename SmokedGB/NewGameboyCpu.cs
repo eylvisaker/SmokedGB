@@ -420,10 +420,44 @@ namespace SmokedGB
             return retval;
         }
 
-        public bool Flag_H { get { return (F & GameboyCpu.FlagSet_H) > 0; } }
-        public bool Flag_C {  get { return (F & GameboyCpu.FlagSet_C) > 0; } }
-        public bool Flag_Z {  get { return (F & GameboyCpu.FlagSet_Z) > 0; } }
-        public bool Flag_N {  get { return (F & GameboyCpu.FlagSet_N) > 0; } }
+        public bool Flag_H
+        {
+            get { return (F & GameboyCpu.FlagSet_H) > 0; }
+            set
+            {
+                if (value)
+                    F = (byte)(F | GameboyCpu.FlagSet_H);
+                else
+                    F = (byte)(F & GameboyCpu.FlagReset_H);
+            }
+        }
+        public bool Flag_C { get { return (F & GameboyCpu.FlagSet_C) > 0; }
+            set
+            {
+                if (value)
+                    F = (byte)(F | GameboyCpu.FlagSet_C);
+                else
+                    F = (byte)(F & GameboyCpu.FlagReset_C);
+            }
+        }
+        public bool Flag_Z { get { return (F & GameboyCpu.FlagSet_Z) > 0; }
+            set
+            {
+                if (value)
+                    F = (byte)(F | GameboyCpu.FlagSet_Z);
+                else
+                    F = (byte)(F & GameboyCpu.FlagReset_Z);
+            }
+        }
+        public bool Flag_N { get { return (F & GameboyCpu.FlagSet_N) > 0; }
+            set
+            {
+                if (value)
+                    F = (byte)(F | GameboyCpu.FlagSet_N);
+                else
+                    F = (byte)(F & GameboyCpu.FlagReset_N);
+            }
+        }
     }
 
     // Re-examine the values here.

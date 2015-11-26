@@ -16,35 +16,27 @@ namespace SmokedGB.UnitTests.CpuTests
             PrepareNextOpCode(GameboyCpu.OpCode.ADD_B);
         }
 
-        public void VerifyFlags(bool? H = null, bool? C = null, bool? Z = null, bool? N = null)
-        {
-            if (H != null) Assert.AreEqual(H, registers.Flag_H, "Flag H was not expected value.");
-            if (C != null) Assert.AreEqual(C, registers.Flag_C, "Flag C was not expected value.");
-            if (Z != null) Assert.AreEqual(Z, registers.Flag_Z, "Flag Z was not expected value.");
-            if (N != null) Assert.AreEqual(N, registers.Flag_N, "Flag N was not expected value.");
-        }
-
         [TestMethod]
         public void AddB()
         {
-            registers.A = 1;
-            registers.B = 2;
+            A = 1;
+            B = 2;
 
             cpu.Step();
 
-            Assert.AreEqual(3, registers.A);
+            Assert.AreEqual(3, A);
             VerifyFlags(false, false, false, false);
         }
 
         [TestMethod]
         public void AddBHalfCarry()
         {
-            registers.A = 8;
-            registers.B = 8;
+            A = 8;
+            B = 8;
 
             cpu.Step();
 
-            Assert.AreEqual(16, registers.A);
+            Assert.AreEqual(16, A);
             VerifyFlags(true, false, false, false);
         }
 
