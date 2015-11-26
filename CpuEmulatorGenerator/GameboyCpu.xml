@@ -124,8 +124,8 @@
     </Operation>
     <Operation Name="Add16" Parameters="2" Inline="true">
       <Variable Name="res" Type="uint">%1 + %2</Variable>
-      <Variable Name="aln" Type="byte">%1 .and. $8FF</Variable>
-      <Variable Name="bln" Type="byte">%2 .and. $8FF</Variable>
+      <Variable Name="aln" Type="ushort">%1 .and. $8FF</Variable>
+      <Variable Name="bln" Type="ushort">%2 .and. $8FF</Variable>
       <Code Flag="!H">aln + bln &gt; $8FF</Code>
       <Code Flag="!C">res &gt; $FFFF</Code>
       <Code ResetFlag="!N"></Code>

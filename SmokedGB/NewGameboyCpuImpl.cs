@@ -1858,8 +1858,8 @@ namespace SmokedGB
 				case OpCode.ADD_HL_BC:
 					{
 						uint res = (uint)(registers.HL + registers.BC);
-						byte aln = (byte)(registers.HL & 0x8FF);
-						byte bln = (byte)(registers.BC & 0x8FF);
+						ushort aln = (ushort)(registers.HL & 0x8FF);
+						ushort bln = (ushort)(registers.BC & 0x8FF);
 
 						if (aln + bln > 0x8FF)
 						{
@@ -1885,8 +1885,8 @@ namespace SmokedGB
 				case OpCode.ADD_HL_DE:
 					{
 						uint res = (uint)(registers.HL + registers.DE);
-						byte aln = (byte)(registers.HL & 0x8FF);
-						byte bln = (byte)(registers.DE & 0x8FF);
+						ushort aln = (ushort)(registers.HL & 0x8FF);
+						ushort bln = (ushort)(registers.DE & 0x8FF);
 
 						if (aln + bln > 0x8FF)
 						{
@@ -1912,8 +1912,8 @@ namespace SmokedGB
 				case OpCode.ADD_HL_HL:
 					{
 						uint res = (uint)(registers.HL + registers.HL);
-						byte aln = (byte)(registers.HL & 0x8FF);
-						byte bln = (byte)(registers.HL & 0x8FF);
+						ushort aln = (ushort)(registers.HL & 0x8FF);
+						ushort bln = (ushort)(registers.HL & 0x8FF);
 
 						if (aln + bln > 0x8FF)
 						{
@@ -1939,8 +1939,8 @@ namespace SmokedGB
 				case OpCode.ADD_HL_SP:
 					{
 						uint res = (uint)(registers.HL + registers.SP);
-						byte aln = (byte)(registers.HL & 0x8FF);
-						byte bln = (byte)(registers.SP & 0x8FF);
+						ushort aln = (ushort)(registers.HL & 0x8FF);
+						ushort bln = (ushort)(registers.SP & 0x8FF);
 
 						if (aln + bln > 0x8FF)
 						{

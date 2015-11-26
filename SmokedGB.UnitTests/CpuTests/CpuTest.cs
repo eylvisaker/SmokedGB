@@ -38,6 +38,11 @@ namespace SmokedGB.UnitTests.CpuTests
         public byte C { get { return registers.C; } set { registers.C = value; } }
         public byte D { get { return registers.D; } set { registers.D = value; } }
 
+        public ushort AF { get { return registers.AF; } set { registers.AF = value; } }
+        public ushort HL { get { return registers.HL; } set { registers.HL = value; } }
+        public ushort BC { get { return registers.BC; } set { registers.BC = value; } }
+        public ushort DE { get { return registers.DE; } set { registers.DE = value; } }
+
         public bool Flag_C { get { return registers.Flag_C; } set { registers.Flag_C = value; } }
         public bool Flag_H { get { return registers.Flag_H; } set { registers.Flag_H = value; } }
         public bool Flag_Z { get { return registers.Flag_Z; } set { registers.Flag_Z = value; } }
