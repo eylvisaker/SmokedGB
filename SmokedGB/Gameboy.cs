@@ -67,6 +67,8 @@ namespace SmokedGB
 			vid = new GameboyVideo();
 			aud = new GameboyAudio();
 
+            Cpu.PassTime += (sender, e) => PassTime(e.Microseconds);
+
 			Paused = true;
 
 			GBThread = new Thread(GBThreadStart);
