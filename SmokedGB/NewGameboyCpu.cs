@@ -421,6 +421,9 @@ namespace SmokedGB
         }
 
         public bool Flag_H { get { return (F & GameboyCpu.FlagSet_H) > 0; } }
+        public bool Flag_C {  get { return (F & GameboyCpu.FlagSet_C) > 0; } }
+        public bool Flag_Z {  get { return (F & GameboyCpu.FlagSet_Z) > 0; } }
+        public bool Flag_N {  get { return (F & GameboyCpu.FlagSet_N) > 0; } }
     }
 
     // Re-examine the values here.

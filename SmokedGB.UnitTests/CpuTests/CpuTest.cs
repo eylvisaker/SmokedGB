@@ -20,7 +20,7 @@ namespace SmokedGB.UnitTests.CpuTests
             cpu.Initialize(memory, false);
         }
 
-        protected void SetNextOpCode(GameboyCpu.OpCode opcode)
+        protected void PrepareNextOpCode(GameboyCpu.OpCode opcode)
         {
             memory[registers.PC] = (byte)opcode;
         }

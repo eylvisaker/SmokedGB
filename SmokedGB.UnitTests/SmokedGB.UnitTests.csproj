@@ -62,7 +62,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CpuTests\AddTest.cs" />
+    <Compile Include="CpuTests\AddBTest.cs" />
     <Compile Include="CpuTests\CpuTest.cs" />
     <Compile Include="Fakes\FakeMemoryController.cs" />
     <Compile Include="MemoryTest.cs" />
