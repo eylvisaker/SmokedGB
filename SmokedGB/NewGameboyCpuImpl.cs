@@ -5451,14 +5451,6 @@ namespace SmokedGB
 
 						registers.A = (byte)(result);
 						registers.F = (byte)(registers.F & FlagReset_H);
-						if (result >= 0x100)
-						{
-							registers.F = (byte)(registers.F | FlagSet_C);
-						}
-						else
-						{
-							registers.F = (byte)(registers.F & FlagReset_C);
-						}
 						if (registers.A == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);

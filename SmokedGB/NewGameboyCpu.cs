@@ -102,6 +102,7 @@ namespace SmokedGB
         {
             bool H = registers.Flag_H;
             bool C = registers.Flag_C;
+            bool N = registers.Flag_N;
 
             bool upperOverflow = (value & 0xF0) > 0x90 || C;
             bool lowerOverflow = (value & 0x0F) > 0x09 || H;
@@ -110,7 +111,13 @@ namespace SmokedGB
                 (upperOverflow ? 0x60 : 0) |
                 (lowerOverflow ? 0x06 : 0);
 
+            if (N) correction *= -1;
+
             int result = value + correction;
+
+            if (upperOverflow)
+                registers.Flag_C = true;
+
             return result;
         }
 

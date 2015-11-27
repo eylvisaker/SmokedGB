@@ -340,7 +340,6 @@
       <Variable Name="result" Type="uint">@DecimalAdjust{%1}</Variable>
       <Code WriteTo="%1">result</Code>
       <Code ResetFlag="!H" />
-      <Code Flag="!C">result &gt;= $100</Code>
       <Code Flag="!Z">%1 == 0</Code>
     </Operation>
   </Operations>
