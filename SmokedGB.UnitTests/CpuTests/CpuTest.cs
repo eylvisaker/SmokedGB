@@ -10,6 +10,8 @@ namespace SmokedGB.UnitTests.CpuTests
         protected Registers registers;
         protected FakeMemoryController memory;
 
+        protected int nextOpCodeWriteTo;
+
         public CpuTest()
         {
             memory = new FakeMemoryController();
@@ -20,9 +22,18 @@ namespace SmokedGB.UnitTests.CpuTests
             cpu.Initialize(memory, false);
         }
 
-        protected void PrepareNextOpCode(GameboyCpu.OpCode opcode)
+        protected void PrepareOpCode(GameboyCpu.OpCode opcode, params byte[] args)
         {
-            memory[registers.PC] = (byte)opcode;
+            memory[registers.PC + nextOpCodeWriteTo] = (byte)opcode;
+
+            nextOpCodeWriteTo++;
+
+            foreach (var arg in args)
+            {
+                memory[registers.PC + nextOpCodeWriteTo] = arg;
+
+                nextOpCodeWriteTo++;
+            }
         }
 
         protected void VerifyFlags(bool? H = null, bool? C = null, bool? Z = null, bool? N = null)
@@ -42,6 +53,8 @@ namespace SmokedGB.UnitTests.CpuTests
         public ushort HL { get { return registers.HL; } set { registers.HL = value; } }
         public ushort BC { get { return registers.BC; } set { registers.BC = value; } }
         public ushort DE { get { return registers.DE; } set { registers.DE = value; } }
+        public ushort SP { get { return registers.SP; } set { registers.SP = value; } }
+        public ushort PC { get { return registers.PC; } set { registers.PC = value; } }
 
         public bool Flag_C { get { return registers.Flag_C; } set { registers.Flag_C = value; } }
         public bool Flag_H { get { return registers.Flag_H; } set { registers.Flag_H = value; } }

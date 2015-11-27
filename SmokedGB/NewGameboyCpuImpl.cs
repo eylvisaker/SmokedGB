@@ -1966,7 +1966,26 @@ namespace SmokedGB
 				case OpCode.ADD_SP_n:
 					{
 						sbyte offset = (sbyte)(Memory[registers.PC]);
+						byte aln = (byte)(registers.SP & 0x0F);
+						byte bln = (byte)(Memory[registers.PC] & 0x0F);
+						byte alb = (byte)(registers.SP & 0xFF);
 
+						if (aln + bln > 0x0F)
+						{
+							registers.F = (byte)(registers.F | FlagSet_H);
+						}
+						else
+						{
+							registers.F = (byte)(registers.F & FlagReset_H);
+						}
+						if (alb + Memory[registers.PC] > 0xFF)
+						{
+							registers.F = (byte)(registers.F | FlagSet_C);
+						}
+						else
+						{
+							registers.F = (byte)(registers.F & FlagReset_C);
+						}
 						registers.F = (byte)(registers.F & FlagReset_Z);
 						registers.F = (byte)(registers.F & FlagReset_N);
 						registers.SP = (ushort)(registers.SP + offset);

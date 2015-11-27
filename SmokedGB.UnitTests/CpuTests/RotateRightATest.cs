@@ -13,7 +13,7 @@ namespace SmokedGB.UnitTests.CpuTests
         [TestInitialize]
         public void Init()
         {
-            PrepareNextOpCode(GameboyCpu.OpCode.RR_A);
+            PrepareOpCode(GameboyCpu.OpCode.RR_A);
         }
 
         [TestMethod]

@@ -133,6 +133,11 @@
     </Operation>
     <Operation Name="AddSigned" Parameters="2" Inline="true">
       <Variable Name="offset" Type="sbyte">%2</Variable>
+      <Variable Name="aln" Type="byte">%1 .and. $0F</Variable>
+      <Variable Name="bln" Type="byte">%2 .and. $0F</Variable>
+      <Variable Name="alb" Type="byte">%1 .and. $FF</Variable>
+      <Code Flag="!H">aln + bln &gt; $0F</Code>
+      <Code Flag="!C">alb + %2 &gt; $FF</Code>
       <Code ResetFlag="!Z"/>
       <Code ResetFlag="!N"/>
       <Code WriteTo="%1">%1+offset</Code>

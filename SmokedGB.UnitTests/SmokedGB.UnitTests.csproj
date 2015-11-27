@@ -64,8 +64,11 @@
   <ItemGroup>
     <Compile Include="CpuTests\AddBTest.cs" />
     <Compile Include="CpuTests\AddHLBCTest.cs" />
+    <Compile Include="CpuTests\AddSPTest.cs" />
     <Compile Include="CpuTests\CpuTest.cs" />
+    <Compile Include="CpuTests\RotateLeftATest.cs" />
     <Compile Include="CpuTests\RotateRightATest.cs" />
+    <Compile Include="CpuTests\RotateLeftCarryATest.cs" />
     <Compile Include="CpuTests\RotateRightCarryATest.cs" />
     <Compile Include="Fakes\FakeMemoryController.cs" />
     <Compile Include="MemoryTest.cs" />
