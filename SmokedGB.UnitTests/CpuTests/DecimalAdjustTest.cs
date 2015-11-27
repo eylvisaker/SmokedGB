@@ -17,47 +17,31 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
         [TestMethod]
-        public void DAA_1()
+        public void DecimalAdjust_15_27()
         {
-            A = 1;
+            A = 0x15 + 0x27;
+            Flag_C = false;
+            Flag_H = false;
+            Flag_N = false;
 
             cpu.Step();
 
-            Assert.AreEqual(0x01, A);
-            VerifyFlags(H: false, C: false, Z: false);
+            Assert.AreEqual(0x42, A);
         }
 
+        [Ignore]
         [TestMethod]
-        public void DAA_12()
+        public void DecimalAdjust_15_27_C()
         {
-            A = 12;
+            A = 0x15 + 0x27;
+            Flag_C = true;
+            Flag_H = false;
+            Flag_N = false;
 
             cpu.Step();
 
-            Assert.AreEqual(0x12, A);
-            VerifyFlags(H: false, C: false, Z: false);
+            Assert.AreEqual(0x42, A);
         }
 
-        [TestMethod]
-        public void DAA_98()
-        {
-            A = 98;
-
-            cpu.Step();
-
-            Assert.AreEqual(0x98, A);
-            VerifyFlags(H: false, C: false, Z: false);
-        }
-
-        [TestMethod]
-        public void DAA_100()
-        {
-            A = 100;
-
-            cpu.Step();
-
-            Assert.AreEqual(0, A);
-            VerifyFlags(Z: true, H: false, C: true);
-        }
     }
 }

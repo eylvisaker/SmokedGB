@@ -278,7 +278,12 @@ namespace SmokedGB
 			lstDasm.Invalidate();
 		}
 
-		private void lstDasm_Paint(object sender, PaintEventArgs e)
+        private void vsbDisassembly_Scroll(object sender, ScrollEventArgs e)
+        {
+            lstDasm.Invalidate();
+        }
+
+        private void lstDasm_Paint(object sender, PaintEventArgs e)
 		{
 			if (gmb.Cpu == null) return;
 			if (registers == null) return;
@@ -297,7 +302,6 @@ namespace SmokedGB
 					CreateDasm(g);
 				}
 			}
-
 
 			PointF pt = new PointF();
 			pt.X = 16;
@@ -727,7 +731,8 @@ namespace SmokedGB
 			}
 		}
 
-		private void breakAtInterruptToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void breakAtInterruptToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			BreakAtInterrupt = !BreakAtInterrupt;
 		}

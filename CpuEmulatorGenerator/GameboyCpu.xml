@@ -76,6 +76,11 @@
       <Code WriteTo="%1">(SP+1)</Code>
       <Code>SP+=2</Code>
     </Operation>
+    <Operation Name="PopAF" Parameters="2" Inline="true">
+      <Code WriteTo="%2">(SP) .and. $F0</Code>
+      <Code WriteTo="%1">(SP+1)</Code>
+      <Code>SP+=2</Code>
+    </Operation>
     <Operation Name="Load" Parameters="2" Inline="true">
       <Code WriteTo="%1" >%2</Code>
     </Operation>
@@ -335,7 +340,7 @@
       <Variable Name="result" Type="uint">@DecimalAdjust{%1}</Variable>
       <Code WriteTo="%1">result</Code>
       <Code ResetFlag="!H" />
-      <Code Flag="!C">result .and. $100</Code>
+      <Code Flag="!C">result &gt;= $100</Code>
       <Code Flag="!Z">%1 == 0</Code>
     </Operation>
   </Operations>
@@ -821,10 +826,12 @@
       <Op Parameters="H,L" Code="e5" Cycles="16" Name="PUSH HL"/>
     </OpCode>
     <OpCode Name="pop" Operation="Pop">
-      <Op Parameters="A,F" Code="f1" Cycles="12" Name="POP AF"/>
       <Op Parameters="B,C" Code="c1" Cycles="12" Name="POP BC"/>
       <Op Parameters="D,E" Code="d1" Cycles="12" Name="POP DE"/>
       <Op Parameters="H,L" Code="e1" Cycles="12" Name="POP HL"/>
+    </OpCode>
+    <OpCode Name="pop_af" Operation="PopAF">
+      <Op Parameters="A,F" Code="f1" Cycles="12" Name="POP AF"/>
     </OpCode>
     <OpCode Name="ldhl" Operation="LoadAdd" >
       <Op Parameters="SP,#" Code="f8" Cycles="12" />

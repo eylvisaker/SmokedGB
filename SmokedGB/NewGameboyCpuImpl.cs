@@ -161,10 +161,10 @@ namespace SmokedGB
 			PUSH_BC = 0xc5,
 			PUSH_DE = 0xd5,
 			PUSH_HL = 0xe5,
-			POP_AF = 0xf1,
 			POP_BC = 0xc1,
 			POP_DE = 0xd1,
 			POP_HL = 0xe1,
+			POP_AF = 0xf1,
 			LDHL_SP_n = 0xf8,
 			LD_A_n = 0x3e,
 			LD_B_n = 0x06,
@@ -4820,14 +4820,6 @@ namespace SmokedGB
 					}
 					break;
 
-				case OpCode.POP_AF:
-					{
-						registers.F = (byte)(Memory[registers.SP]);
-						registers.A = (byte)(Memory[registers.SP + 1]);
-						registers.SP += 2;
-					}
-					break;
-
 				case OpCode.POP_BC:
 					{
 						registers.C = (byte)(Memory[registers.SP]);
@@ -4848,6 +4840,14 @@ namespace SmokedGB
 					{
 						registers.L = (byte)(Memory[registers.SP]);
 						registers.H = (byte)(Memory[registers.SP + 1]);
+						registers.SP += 2;
+					}
+					break;
+
+				case OpCode.POP_AF:
+					{
+						registers.F = (byte)(Memory[registers.SP] & 0xF0);
+						registers.A = (byte)(Memory[registers.SP + 1]);
 						registers.SP += 2;
 					}
 					break;
@@ -5451,7 +5451,7 @@ namespace SmokedGB
 
 						registers.A = (byte)(result);
 						registers.F = (byte)(registers.F & FlagReset_H);
-						if (0 != (result & 0x100))
+						if (result >= 0x100)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}

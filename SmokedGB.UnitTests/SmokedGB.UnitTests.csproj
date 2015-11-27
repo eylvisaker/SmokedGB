@@ -68,6 +68,7 @@
     <Compile Include="CpuTests\CallTest.cs" />
     <Compile Include="CpuTests\CpuTest.cs" />
     <Compile Include="CpuTests\DecimalAdjustTest.cs" />
+    <Compile Include="CpuTests\PopAFTest.cs" />
     <Compile Include="CpuTests\ResetTest.cs" />
     <Compile Include="CpuTests\RotateLeftATest.cs" />
     <Compile Include="CpuTests\RotateRightATest.cs" />

@@ -100,20 +100,17 @@ namespace SmokedGB
 
         public int DecimalAdjust(byte value)
         {
-            int result = 0;
-            int v = value;
-            int digits = 0;
+            bool H = registers.Flag_H;
+            bool C = registers.Flag_C;
 
-            while (v > 0)
-            {
-                int thisResult = v % 10;
+            bool upperOverflow = (value & 0xF0) > 0x90 || C;
+            bool lowerOverflow = (value & 0x0F) > 0x09 || H;
 
-                result |= thisResult << (4 * digits);
+            int correction =
+                (upperOverflow ? 0x60 : 0) |
+                (lowerOverflow ? 0x06 : 0);
 
-                v /= 10;
-                digits++;
-            }
-
+            int result = value + correction;
             return result;
         }
 
@@ -391,7 +388,6 @@ namespace SmokedGB
 
         public void StepOver()
         {
-            throw new NotImplementedException();
         }
 
         public bool Trace
