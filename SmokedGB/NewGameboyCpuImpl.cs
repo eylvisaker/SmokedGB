@@ -257,6 +257,7 @@ namespace SmokedGB
 			LDI_xHL_A = 0x22,
 			LDD_A_xHL = 0x3a,
 			LDD_xHL_A = 0x32,
+			DAA = 0x27,
 			OpCodeCB = 0xcb,
 		}
 
@@ -569,7 +570,7 @@ namespace SmokedGB
 			"INC H",               // 36    0024
 			"DEC H",               // 37    0025
 			"LD H,#",              // 38    0026
-			"bad opcode",          // 39    0027
+			"DAA",                 // 39    0027
 			"JR Z,@",              // 40    0028
 			"ADD HL,HL",           // 41    0029
 			"LDI A,(HL)",          // 42    002A
@@ -833,7 +834,7 @@ namespace SmokedGB
 			4,                   // 36    0024
 			4,                   // 37    0025
 			8,                   // 38    0026
-			99,                  // 39    0027
+			4,                   // 39    0027
 			8,                   // 40    0028
 			8,                   // 41    0029
 			8,                   // 42    002A
@@ -1606,7 +1607,7 @@ namespace SmokedGB
 			{
 				case OpCode.HALT:
 					{
-						Op_Halt();
+						registers.halt = (byte)(1);
 					}
 					break;
 
@@ -5441,6 +5442,31 @@ namespace SmokedGB
 					{
 						Memory[registers.HL] = (byte)(registers.A);
 						registers.HL --;
+					}
+					break;
+
+				case OpCode.DAA:
+					{
+						uint result = (uint)(DecimalAdjust ( registers.A ));
+
+						registers.A = (byte)(result);
+						registers.F = (byte)(registers.F & FlagReset_H);
+						if (0 != (result & 0x100))
+						{
+							registers.F = (byte)(registers.F | FlagSet_C);
+						}
+						else
+						{
+							registers.F = (byte)(registers.F & FlagReset_C);
+						}
+						if (registers.A == 0)
+						{
+							registers.F = (byte)(registers.F | FlagSet_Z);
+						}
+						else
+						{
+							registers.F = (byte)(registers.F & FlagReset_Z);
+						}
 					}
 					break;
 
@@ -9396,11 +9422,6 @@ namespace SmokedGB
 					break;
 
 			}
-		}
-
-		private void Op_Halt()
-		{
-			registers.halt = (byte)(1);
 		}
 	}
 	[StructLayout(LayoutKind.Explicit)]

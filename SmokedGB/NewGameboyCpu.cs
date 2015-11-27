@@ -98,6 +98,25 @@ namespace SmokedGB
             }
         }
 
+        public int DecimalAdjust(byte value)
+        {
+            int result = 0;
+            int v = value;
+            int digits = 0;
+
+            while (v > 0)
+            {
+                int thisResult = v % 10;
+
+                result |= thisResult << (4 * digits);
+
+                v /= 10;
+                digits++;
+            }
+
+            return result;
+        }
+
         public int CyclesPerSecond
         {
             get { return cyclesPerSecond; }

@@ -328,8 +328,15 @@
       <Code WriteTo="mask">.not. mask</Code>
       <Code WriteTo="%2">%2 .and. mask</Code>
     </Operation>
-    <Operation Name="Halt" Parameters="0" Inlin="true">
+    <Operation Name="Halt" Parameters="0" Inline="true">
       <Code WriteTo="halt">1</Code>
+    </Operation>
+    <Operation Name="DecimalAdjust" Parameters="1" Inline="true">
+      <Variable Name="result" Type="uint">@DecimalAdjust{%1}</Variable>
+      <Code WriteTo="%1">result</Code>
+      <Code ResetFlag="!H" />
+      <Code Flag="!C">result .and. $100</Code>
+      <Code Flag="!Z">%1 == 0</Code>
     </Operation>
   </Operations>
   <OpCodes>
@@ -937,6 +944,8 @@
       <Op Parameters="A,(HL),HL" Code="3a" Cycles="8" Name="LDD A,(HL)"/>
       <Op Parameters="(HL),A,HL" Code="32" Cycles="8" Name="LDD (HL),A"/>
     </OpCode>
-
+    <OpCode Name="daa" Operation="DecimalAdjust">
+      <Op Parameters="A" Code="27" Cycles="4" Name="DAA"/>
+    </OpCode>            
   </OpCodes>
 </Cpu>

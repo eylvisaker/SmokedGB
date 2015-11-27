@@ -646,7 +646,7 @@ namespace CpuEmulatorGenerator
 		}
 
 		Regex tokenizer = new Regex(
-			@"^(\(.*?\)|![a-zA-Z0-9]|\%[a-zA-Z0-9]|\.[a-z]+?\.|[a-zA-Z_][a-zA-Z_0-9]*|[0-9]+|\$[0-9a-fA-F]+|\+\+|--|>>|<<|\+\=|-\=|\=\=|\!\=|\<\=|\>\=|[+\-/*=<>]|\#+|\.or\.|\.and\.|\.xor\.|\.not\.)", RegexOptions.Compiled);
+			@"^(\(.*?\)|[\{\}]|![a-zA-Z0-9]|\@[a-zA-Z0-9]+|\%[a-zA-Z0-9]|\.[a-z]+?\.|[a-zA-Z_][a-zA-Z_0-9]*|[0-9]+|\$[0-9a-fA-F]+|\+\+|--|>>|<<|\+\=|-\=|\=\=|\!\=|\<\=|\>\=|[+\-/*=<>]|\#+|\.or\.|\.and\.|\.xor\.|\.not\.)", RegexOptions.Compiled);
 		Regex identifier = new Regex(@"^[a-zA-Z_][a-zA-Z_0-9]*");
 
 		private string ParseCode(string text, List<PassedParameter> passed)
@@ -667,16 +667,18 @@ namespace CpuEmulatorGenerator
 				if (matchText == "")
 					throw new Exception("Could not understand text.");
 
-				if (IsIdentifier(matchText)) retval += GetVariableName(matchText);
-				else if (IsSubstitution(matchText)) retval += ReplaceParameter(matchText, passed);
-				else if (IsHex(matchText)) retval += gen.HexString(matchText.Substring(1));
-				else if (IsNumeric(matchText)) retval += matchText;
-				else if (IsOperator(matchText)) retval += gen.OperatorString(matchText);
-				else if (IsParenthesis(matchText)) retval += PointerText(matchText, passed);
-				else if (IsHash(matchText)) retval += GetVariableName(matchText);
-				else if (IsFlag(matchText)) retval += FlagString(matchText);
-				else
-					throw new Exception("Could not understand text \"" + matchText + "\".");
+                if (IsLibraryCall(matchText)) retval += matchText.Substring(1);
+                else if (IsBrace(matchText)) retval += BraceConvert(matchText);
+                else if (IsIdentifier(matchText)) retval += GetVariableName(matchText);
+                else if (IsSubstitution(matchText)) retval += ReplaceParameter(matchText, passed);
+                else if (IsHex(matchText)) retval += gen.HexString(matchText.Substring(1));
+                else if (IsNumeric(matchText)) retval += matchText;
+                else if (IsOperator(matchText)) retval += gen.OperatorString(matchText);
+                else if (IsParenthesis(matchText)) retval += PointerText(matchText, passed);
+                else if (IsHash(matchText)) retval += GetVariableName(matchText);
+                else if (IsFlag(matchText)) retval += FlagString(matchText);
+                else
+                    throw new Exception("Could not understand text \"" + matchText + "\".");
 
 				retval += " ";
 
@@ -686,7 +688,20 @@ namespace CpuEmulatorGenerator
 			return retval.Trim();
 		}
 
-		private bool IsSubstitution(string matchText)
+        private string BraceConvert(string matchText)
+        {
+            if (matchText == "{") return "(";
+            if (matchText == "}") return ")";
+
+            throw new InvalidOperationException();
+        }
+
+        private bool IsBrace(string matchText)
+        {
+            return matchText == "{" || matchText == "}";
+        }
+
+        private bool IsSubstitution(string matchText)
 		{
 			return matchText.StartsWith("%");
 		}
@@ -781,7 +796,10 @@ namespace CpuEmulatorGenerator
 			return matchText.StartsWith("$");
 		}
 
-
+        private bool IsLibraryCall(string matchText)
+        {
+            return matchText.StartsWith("@");
+        }
 		private bool IsIdentifier(string matchText)
 		{
 			return identifier.Matches(matchText).Count == 1;
