@@ -65,7 +65,9 @@
     <Compile Include="CpuTests\AddBTest.cs" />
     <Compile Include="CpuTests\AddHLBCTest.cs" />
     <Compile Include="CpuTests\AddSPTest.cs" />
+    <Compile Include="CpuTests\CallTest.cs" />
     <Compile Include="CpuTests\CpuTest.cs" />
+    <Compile Include="CpuTests\ResetTest.cs" />
     <Compile Include="CpuTests\RotateLeftATest.cs" />
     <Compile Include="CpuTests\RotateRightATest.cs" />
     <Compile Include="CpuTests\RotateLeftCarryATest.cs" />

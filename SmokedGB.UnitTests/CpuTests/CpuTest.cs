@@ -60,5 +60,30 @@ namespace SmokedGB.UnitTests.CpuTests
         public bool Flag_H { get { return registers.Flag_H; } set { registers.Flag_H = value; } }
         public bool Flag_Z { get { return registers.Flag_Z; } set { registers.Flag_Z = value; } }
         public bool Flag_N { get { return registers.Flag_N; } set { registers.Flag_N = value; } }
+
+
+        /// <summary>
+        /// Peeks into the stack and returns a 16-bit value
+        /// </summary>
+        /// <param name="depth">Number of bytes deep into the stack to peek.</param>
+        /// <returns></returns>
+        protected ushort PeekStack16(int depth = 0)
+        {
+            int lb = PeekStack(depth);
+            int hb = PeekStack(depth + 1);
+            int result = (hb << 8) + lb;
+
+            return (ushort)result;
+        }
+
+        /// <summary>
+        /// Peeks into the stack and returns an 8-bit value.
+        /// </summary>
+        /// <param name="depth">Number of bytes deep into the stack to peek.</param>
+        /// <returns></returns>
+        protected byte PeekStack(int depth = 0)
+        {
+            return memory[SP + depth];
+        }
     }
 }
