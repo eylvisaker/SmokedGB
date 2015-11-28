@@ -104,22 +104,28 @@ namespace SmokedGB
             bool C = registers.Flag_C;
             bool N = registers.Flag_N;
 
-            int result = value;
-            int sign = N ? -1 : 1;
+            int A = value;
 
-            bool lowerOverflow = (result & 0x0F) > 0x09 || H;
-            if (lowerOverflow)
-                result += sign * 0x06;
+            if (!N)
+            {
+                if (H || (A & 0xF) > 9)
+                    A += 0x06;
 
-            bool upperOverflow = (result & 0xFFF0) > 0x90 || C;
+                if (C || A > 0x9f)
+                    A += 0x60;
+            }
+            else
+            {
+                if (H)
+                    A = (A - 6) & 0xff;
+                if (C)
+                    A -= 0x60;
+            }
 
-            if (upperOverflow)
-                result += sign * 0x60;
-
-            if (upperOverflow)
+            if ((A & 0x100) == 0x100)
                 registers.Flag_C = true;
 
-            return result;
+            return A & 0xFF;
         }
 
         public int CyclesPerSecond
