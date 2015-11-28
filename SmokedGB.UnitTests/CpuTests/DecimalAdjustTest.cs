@@ -78,6 +78,55 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
         [TestMethod]
+        public void DecimalAdjust_AllSubtraction()
+        {
+            StringBuilder failure = new StringBuilder();
+
+            for (int j = 0; j < 100; j++)
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    int bcd_i = ToBcd(i);
+                    int bcd_j = ToBcd(j);
+                    int result = bcd_i - bcd_j;
+
+                    int sum = i - j + 100;
+                    if (sum >= 100) sum -= 100;
+
+                    int expected = ToBcd(sum);
+
+                    A = (byte)result;
+                    Flag_N = true;
+                    Flag_H = (bcd_i & 0x0f) < (bcd_j & 0x0f);
+                    Flag_C = (bcd_i & 0xf0) < (bcd_j & 0xf0) + (Flag_H ? 0x10 : 0);
+                    bool C = Flag_C;
+
+                    if (i == 0 && j == 1)
+                    {
+                        int k = 4;
+                    }
+
+                    cpu.Step();
+                    PC = 0x100;
+
+                    if ((byte)expected != A)
+                    {
+                        failure.AppendFormat("Failed on {0}-{1}={2}", i, j, sum);
+                        failure.AppendLine();
+                    }
+                    if (C != Flag_C)
+                    {
+                        failure.AppendFormat("Carry flag not set on {0}-{1}={2}", i, j, sum);
+                        failure.AppendLine();
+                    }
+
+                }
+            }
+
+            Assert.IsTrue(failure.Length == 0, failure.ToString());
+        }
+
+        [TestMethod]
         public void DecimalAdjust_15_27()
         {
             A = 0x15 + 0x27;

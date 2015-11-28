@@ -36,6 +36,12 @@ namespace SmokedGB.UnitTests.CpuTests
             }
         }
 
+        protected void PrepareOpCode(GameboyCpu.OpCodeCB opcodeCB, params byte[] args)
+        {
+            PrepareOpCode(GameboyCpu.OpCode.OpCodeCB);
+            PrepareOpCode((GameboyCpu.OpCode)opcodeCB, args);
+        }
+
         protected void VerifyFlags(bool? H = null, bool? C = null, bool? Z = null, bool? N = null)
         {
             if (H != null) Assert.AreEqual(H, registers.Flag_H, "Flag H was not expected value.");

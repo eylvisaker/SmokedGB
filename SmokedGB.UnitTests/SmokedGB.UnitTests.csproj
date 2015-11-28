@@ -74,6 +74,7 @@
     <Compile Include="CpuTests\RotateRightATest.cs" />
     <Compile Include="CpuTests\RotateLeftCarryATest.cs" />
     <Compile Include="CpuTests\RotateRightCarryATest.cs" />
+    <Compile Include="CpuTests\ShiftRightIntoCarryATest.cs" />
     <Compile Include="Fakes\FakeMemoryController.cs" />
     <Compile Include="MemoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

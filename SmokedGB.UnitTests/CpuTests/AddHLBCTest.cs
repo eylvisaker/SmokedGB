@@ -45,6 +45,20 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
         [TestMethod]
+        public void AddHLBC_LargeButNoHalfCarry()
+        {
+            Flag_Z = false;
+
+            HL = 0x08ff;
+            BC = 0x0001;
+
+            cpu.Step();
+
+            Assert.AreEqual(0x0900, HL);
+            VerifyFlags(H: false, C: false, Z: false, N: false);
+        }
+
+        [TestMethod]
         public void AddHLBC_FullCarry()
         {
             Flag_Z = false;

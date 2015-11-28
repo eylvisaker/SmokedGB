@@ -1859,10 +1859,10 @@ namespace SmokedGB
 				case OpCode.ADD_HL_BC:
 					{
 						uint res = (uint)(registers.HL + registers.BC);
-						ushort aln = (ushort)(registers.HL & 0x8FF);
-						ushort bln = (ushort)(registers.BC & 0x8FF);
+						ushort aln = (ushort)(registers.HL & 0xFFF);
+						ushort bln = (ushort)(registers.BC & 0xFFF);
 
-						if (aln + bln > 0x8FF)
+						if (aln + bln > 0xFFF)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -1886,10 +1886,10 @@ namespace SmokedGB
 				case OpCode.ADD_HL_DE:
 					{
 						uint res = (uint)(registers.HL + registers.DE);
-						ushort aln = (ushort)(registers.HL & 0x8FF);
-						ushort bln = (ushort)(registers.DE & 0x8FF);
+						ushort aln = (ushort)(registers.HL & 0xFFF);
+						ushort bln = (ushort)(registers.DE & 0xFFF);
 
-						if (aln + bln > 0x8FF)
+						if (aln + bln > 0xFFF)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -1913,10 +1913,10 @@ namespace SmokedGB
 				case OpCode.ADD_HL_HL:
 					{
 						uint res = (uint)(registers.HL + registers.HL);
-						ushort aln = (ushort)(registers.HL & 0x8FF);
-						ushort bln = (ushort)(registers.HL & 0x8FF);
+						ushort aln = (ushort)(registers.HL & 0xFFF);
+						ushort bln = (ushort)(registers.HL & 0xFFF);
 
-						if (aln + bln > 0x8FF)
+						if (aln + bln > 0xFFF)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -1940,10 +1940,10 @@ namespace SmokedGB
 				case OpCode.ADD_HL_SP:
 					{
 						uint res = (uint)(registers.HL + registers.SP);
-						ushort aln = (ushort)(registers.HL & 0x8FF);
-						ushort bln = (ushort)(registers.SP & 0x8FF);
+						ushort aln = (ushort)(registers.HL & 0xFFF);
+						ushort bln = (ushort)(registers.SP & 0xFFF);
 
-						if (aln + bln > 0x8FF)
+						if (aln + bln > 0xFFF)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
