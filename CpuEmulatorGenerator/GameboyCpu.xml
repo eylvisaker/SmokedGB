@@ -300,6 +300,16 @@
       <Code Flag="!Z">%1 == 0</Code>
       <Code Flag="!C">carry</Code>
     </Operation>
+    <Operation Name="RRCA" Parameters="0" Inline="true">
+      <Variable Name="carry" Type="byte">A .and. $1</Variable>
+      <Variable Name="inp" Type="byte">carry &lt;&lt; 7</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code ResetFlag="!Z" />
+      <Code WriteTo="A">A &gt;&gt; 1</Code>
+      <Code WriteTo="A">A+inp</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
     <Operation Name="RRC" Parameters="1" Inline="true">
       <Variable Name="carry" Type="byte">%1 .and. $1</Variable>
       <Variable Name="inp" Type="byte">carry &lt;&lt; 7</Variable>
@@ -308,6 +318,16 @@
       <Code WriteTo="%1">%1 &gt;&gt; 1</Code>
       <Code WriteTo="%1">%1+inp</Code>
       <Code Flag="!Z">%1 == 0</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
+    <Operation Name="RRA" Parameters="0" Inline="true">
+      <Variable Name="carry" Type="byte">A .and. $1</Variable>
+      <Variable Name="inp" Type="byte">!C &lt;&lt; 7</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code ResetFlag="!Z" />
+      <Code WriteTo="A">A &gt;&gt; 1</Code>
+      <Code WriteTo="A">A+inp</Code>
       <Code Flag="!C">carry</Code>
     </Operation>
     <Operation Name="RR" Parameters="1" Inline="true">
@@ -590,8 +610,10 @@
     <OpCode Name="di" Operation="DI">
       <Op Parameters="" Code="f3" Cycles="4" />
     </OpCode>
+    <OpCode Name="rra" Operation="RRA">
+      <Op Parameters="" Code="1f" Cycles="4"/>
+    </OpCode>
     <OpCode Name="rr" Operation="RR">
-      <Op Parameters="A" Code="1f" Cycles="4"/>
       <Op Parameters="A" Code="cb 1f" Cycles="8"/>
       <Op Parameters="B" Code="cb 18" Cycles="8"/>
       <Op Parameters="C" Code="cb 19" Cycles="8"/>
@@ -601,8 +623,10 @@
       <Op Parameters="L" Code="cb 1d" Cycles="8"/>
       <Op Parameters="(HL)" Code="cb 1e" Cycles="16"/>
     </OpCode>
+    <OpCode Name="rrca" Operation="RRCA">
+      <Op Parameters="" Code="0f" Cycles="4"/>
+    </OpCode>
     <OpCode Name="rrc" Operation="RRC">
-      <Op Parameters="A" Code="0f" Cycles="4"/>
       <Op Parameters="A" Code="cb 0f" Cycles="8"/>
       <Op Parameters="B" Code="cb 08" Cycles="8"/>
       <Op Parameters="C" Code="cb 09" Cycles="8"/>

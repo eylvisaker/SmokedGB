@@ -13,11 +13,11 @@ namespace SmokedGB.UnitTests.CpuTests
         [TestInitialize]
         public void Init()
         {
-            PrepareOpCode(GameboyCpu.OpCode.RR_A);
+            PrepareOpCode(GameboyCpu.OpCode.RRA);
         }
 
         [TestMethod]
-        public void RRANoCarry()
+        public void RRA_NoCarry()
         {
             Flag_C = false;
             A = 0x22;
@@ -29,7 +29,7 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
         [TestMethod]
-        public void RRACarry()
+        public void RRA_Carry()
         {
             Flag_C = false;
             A = 0x11;
@@ -41,7 +41,7 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
         [TestMethod]
-        public void RRAZero()
+        public void RRA_Zero()
         {
             Flag_C = false;
             A = 1;
@@ -49,11 +49,11 @@ namespace SmokedGB.UnitTests.CpuTests
             cpu.Step();
             Assert.AreEqual(0, A);
 
-            VerifyFlags(H: false, C: true, Z: true, N: false);
+            VerifyFlags(H: false, C: true, Z: false, N: false);
         }
 
         [TestMethod]
-        public void RRAWithCarry()
+        public void RRA_WithCarry()
         {
             Flag_C = true;
             A = 0;

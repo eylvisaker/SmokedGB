@@ -24,8 +24,8 @@ namespace SmokedGB
 			RETI = 0xd9,
 			EI = 0xfb,
 			DI = 0xf3,
-			RR_A = 0x1f,
-			RRC_A = 0x0f,
+			RRA = 0x1f,
+			RRCA = 0x0f,
 			RLA = 0x17,
 			RLCA = 0x07,
 			INC_BC = 0x03,
@@ -546,7 +546,7 @@ namespace SmokedGB
 			"INC C",               // 12    000C
 			"DEC C",               // 13    000D
 			"LD C,#",              // 14    000E
-			"RRC A",               // 15    000F
+			"RRCA",                // 15    000F
 			"bad opcode",          // 16    0010
 			"LD DE,##",            // 17    0011
 			"LD (DE),A",           // 18    0012
@@ -562,7 +562,7 @@ namespace SmokedGB
 			"INC E",               // 28    001C
 			"DEC E",               // 29    001D
 			"LD E,#",              // 30    001E
-			"RR A",                // 31    001F
+			"RRA",                 // 31    001F
 			"JR NZ,@",             // 32    0020
 			"LD HL,##",            // 33    0021
 			"LDI (HL),A",          // 34    0022
@@ -1696,23 +1696,16 @@ namespace SmokedGB
 					}
 					break;
 
-				case OpCode.RR_A:
+				case OpCode.RRA:
 					{
 						byte carry = (byte)(registers.A & 0x1);
 						byte inp = (byte)(((registers.F >> 4) & 0x1) << 7);
 
 						registers.F = (byte)(registers.F & FlagReset_N);
 						registers.F = (byte)(registers.F & FlagReset_H);
+						registers.F = (byte)(registers.F & FlagReset_Z);
 						registers.A = (byte)(registers.A >> 1);
 						registers.A = (byte)(registers.A + inp);
-						if (registers.A == 0)
-						{
-							registers.F = (byte)(registers.F | FlagSet_Z);
-						}
-						else
-						{
-							registers.F = (byte)(registers.F & FlagReset_Z);
-						}
 						if (0 != (carry))
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
@@ -1724,23 +1717,16 @@ namespace SmokedGB
 					}
 					break;
 
-				case OpCode.RRC_A:
+				case OpCode.RRCA:
 					{
 						byte carry = (byte)(registers.A & 0x1);
 						byte inp = (byte)(carry << 7);
 
 						registers.F = (byte)(registers.F & FlagReset_N);
 						registers.F = (byte)(registers.F & FlagReset_H);
+						registers.F = (byte)(registers.F & FlagReset_Z);
 						registers.A = (byte)(registers.A >> 1);
 						registers.A = (byte)(registers.A + inp);
-						if (registers.A == 0)
-						{
-							registers.F = (byte)(registers.F | FlagSet_Z);
-						}
-						else
-						{
-							registers.F = (byte)(registers.F & FlagReset_Z);
-						}
 						if (0 != (carry))
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
