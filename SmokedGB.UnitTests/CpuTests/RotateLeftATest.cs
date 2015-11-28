@@ -13,7 +13,7 @@ namespace SmokedGB.UnitTests.CpuTests
         [TestInitialize]
         public void Initialize()
         {
-            PrepareOpCode(GameboyCpu.OpCode.RL_A);
+            PrepareOpCode(GameboyCpu.OpCode.RLA);
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace SmokedGB.UnitTests.CpuTests
             cpu.Step();
             Assert.AreEqual(0, A);
 
-            VerifyFlags(H: false, C: true, Z: true, N: false);
+            VerifyFlags(H: false, C: true, Z: false, N: false);
         }
 
         [TestMethod]
