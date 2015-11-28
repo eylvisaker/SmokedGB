@@ -13,7 +13,68 @@ namespace SmokedGB.UnitTests.CpuTests
         [TestInitialize]
         public void Initialize()
         {
+            PC = 0x100;
             PrepareOpCode(GameboyCpu.OpCode.DAA);
+        }
+
+        int ToBcd(int value)
+        {
+            int result = 0;
+            int v = value;
+            int digits = 0;
+
+            while (v > 0)
+            {
+                int d = v % 10;
+                d <<= 4 * digits;
+
+                result |= d;
+                v /= 10;
+                digits++;
+            }
+
+            return result;
+        }
+
+        [TestMethod]
+        public void DecimalAdjust_AllAddition()
+        {
+            StringBuilder failure = new StringBuilder();
+
+            for(int i = 0; i < 100; i++)
+            {
+                for (int j = i; j < 100; j++)
+                {
+                    int bcd_i = ToBcd(i);
+                    int bcd_j = ToBcd(j);
+                    int result = bcd_i + bcd_j;
+
+                    int sum = i + j;
+                    int expected = ToBcd(sum);
+
+                    A = (byte)result;
+                    Flag_N = false;
+                    Flag_H = (bcd_i & 0x0f) + (bcd_j & 0x0f) >= 0x10;
+                    Flag_C = (bcd_i & 0xf0) + (bcd_j & 0xf0) + (Flag_H ? 0x10 : 0) >= 0x100;
+
+                    cpu.Step();
+                    PC = 0x100;
+
+                    if ((byte)expected != A)
+                    {
+                        failure.AppendFormat("Failed on {0}+{1}={2}", i, j, sum);
+                        failure.AppendLine();
+                    }
+                    if (sum >= 100 && Flag_C == false)
+                    {
+                        failure.AppendFormat("Carry flag not set on {0}+{1}={2}", i, j, sum);
+                        failure.AppendLine();
+                    }
+                    
+                }
+            }
+
+            Assert.IsTrue(failure.Length == 0, failure.ToString());
         }
 
         [TestMethod]
@@ -94,6 +155,18 @@ namespace SmokedGB.UnitTests.CpuTests
 
             Assert.AreEqual(0x08, A);
             VerifyFlags(H: false, C: false, Z: false, N: true);
+        }
+
+        [TestMethod]
+        public void DecimalAdjust_()
+        {
+            A = 0x33;
+            Flag_C = true;
+            Flag_H = true;
+
+            cpu.Step();
+
+            Assert.AreEqual(0x99, A);
         }
     }
 }

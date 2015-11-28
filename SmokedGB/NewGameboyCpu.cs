@@ -104,16 +104,17 @@ namespace SmokedGB
             bool C = registers.Flag_C;
             bool N = registers.Flag_N;
 
-            bool upperOverflow = (value & 0xF0) > 0x90 || C;
-            bool lowerOverflow = (value & 0x0F) > 0x09 || H;
+            int result = value;
+            int sign = N ? -1 : 1;
 
-            int correction =
-                (upperOverflow ? 0x60 : 0) |
-                (lowerOverflow ? 0x06 : 0);
+            bool lowerOverflow = (result & 0x0F) > 0x09 || H;
+            if (lowerOverflow)
+                result += sign * 0x06;
 
-            if (N) correction *= -1;
+            bool upperOverflow = (result & 0xFFF0) > 0x90 || C;
 
-            int result = value + correction;
+            if (upperOverflow)
+                result += sign * 0x60;
 
             if (upperOverflow)
                 registers.Flag_C = true;
