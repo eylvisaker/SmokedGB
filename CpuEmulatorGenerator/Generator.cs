@@ -233,7 +233,7 @@ namespace CpuEmulatorGenerator
 			{
 				gen.BeginCase(codes.Name + "." + code.Name);
 
-				if (IsCodePage(code.Value))
+				if (IsCodePage(code.Value) && code.Value != codePageName)
 				{
 					gen.MethodCall("ExecOpCode" + code.Value.ToUpperInvariant());
 					gen.EndCase();

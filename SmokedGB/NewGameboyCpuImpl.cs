@@ -6726,9 +6726,12 @@ namespace SmokedGB
 
 				case OpCodeCB.SET_1_E:
 					{
-						ExecOpCodeCB();
+						byte mask = (byte)(0x1 << 1);
+
+						registers.E = (byte)(registers.E | mask);
 					}
 					break;
+
 				case OpCodeCB.SET_1_H:
 					{
 						byte mask = (byte)(0x1 << 1);
