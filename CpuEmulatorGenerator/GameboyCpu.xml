@@ -166,15 +166,16 @@
       <Code Flag="!Z">f1==0</Code>
     </Operation>
     <Operation Name="Sbc" Parameters="1" Inline="true">
-      <Variable Name="val" Type="byte">%1 + !C</Variable>
-      <Variable Name="f1" Type="byte">A - val</Variable>
-      <Variable Name="f2" Type="byte">A .and. $F</Variable>
-      <Variable Name="f3" Type="byte">val .and. $F</Variable>
-      <Code Flag="!H">f2 &lt; f3</Code>
-      <Code Flag="!C">A &lt; val</Code>
+      <Variable Name="value" Type="int">%1</Variable>
+      <Variable Name="sum" Type="int">value + !C</Variable>
+      <Variable Name="result" Type="byte">A - sum</Variable>
+      <Variable Name="f1" Type="int">A .and. $F</Variable>
+      <Variable Name="f2" Type="int">value .and. $F</Variable>
       <Code SetFlag="!N"></Code>
-      <Code WriteTo="A">f1</Code>
-      <Code Flag="!Z">f1==0</Code>
+      <Code Flag="!H">f1 - f2 - !C &lt; 0</Code>
+      <Code Flag="!C">A &lt; sum</Code>
+      <Code Flag="!Z">result==0</Code>
+      <Code WriteTo="A">result</Code>
     </Operation>
     <Operation Name="Cp" Parameters="1" Inline="true">
       <Variable Name="f1" Type="byte">A - %1</Variable>

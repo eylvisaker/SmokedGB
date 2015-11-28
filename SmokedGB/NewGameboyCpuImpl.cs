@@ -4465,12 +4465,14 @@ namespace SmokedGB
 
 				case OpCode.SBC_A:
 					{
-						byte val = (byte)(registers.A + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(registers.A);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4478,7 +4480,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4486,9 +4488,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4496,17 +4496,20 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 					}
 					break;
 
 				case OpCode.SBC_B:
 					{
-						byte val = (byte)(registers.B + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(registers.B);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4514,7 +4517,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4522,9 +4525,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4532,17 +4533,20 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 					}
 					break;
 
 				case OpCode.SBC_C:
 					{
-						byte val = (byte)(registers.C + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(registers.C);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4550,7 +4554,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4558,9 +4562,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4568,17 +4570,20 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 					}
 					break;
 
 				case OpCode.SBC_D:
 					{
-						byte val = (byte)(registers.D + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(registers.D);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4586,7 +4591,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4594,9 +4599,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4604,17 +4607,20 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 					}
 					break;
 
 				case OpCode.SBC_E:
 					{
-						byte val = (byte)(registers.E + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(registers.E);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4622,7 +4628,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4630,9 +4636,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4640,17 +4644,20 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 					}
 					break;
 
 				case OpCode.SBC_H:
 					{
-						byte val = (byte)(registers.H + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(registers.H);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4658,7 +4665,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4666,9 +4673,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4676,17 +4681,20 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 					}
 					break;
 
 				case OpCode.SBC_L:
 					{
-						byte val = (byte)(registers.L + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(registers.L);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4694,7 +4702,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4702,9 +4710,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4712,17 +4718,20 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 					}
 					break;
 
 				case OpCode.SBC_xHL:
 					{
-						byte val = (byte)(Memory[registers.HL] + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(Memory[registers.HL]);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4730,7 +4739,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4738,9 +4747,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4748,17 +4755,20 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 					}
 					break;
 
 				case OpCode.SBC_n:
 					{
-						byte val = (byte)(Memory[registers.PC] + ((registers.F >> 4) & 0x1));
-						byte f1 = (byte)(registers.A - val);
-						byte f2 = (byte)(registers.A & 0xF);
-						byte f3 = (byte)(val & 0xF);
+						int value = (int)(Memory[registers.PC]);
+						int sum = (int)(value + ((registers.F >> 4) & 0x1));
+						byte result = (byte)(registers.A - sum);
+						int f1 = (int)(registers.A & 0xF);
+						int f2 = (int)(value & 0xF);
 
-						if (f2 < f3)
+						registers.F = (byte)(registers.F | FlagSet_N);
+						if (f1 - f2 - ((registers.F >> 4) & 0x1) < 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_H);
 						}
@@ -4766,7 +4776,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_H);
 						}
-						if (registers.A < val)
+						if (registers.A < sum)
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);
 						}
@@ -4774,9 +4784,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_C);
 						}
-						registers.F = (byte)(registers.F | FlagSet_N);
-						registers.A = (byte)(f1);
-						if (f1 == 0)
+						if (result == 0)
 						{
 							registers.F = (byte)(registers.F | FlagSet_Z);
 						}
@@ -4784,6 +4792,7 @@ namespace SmokedGB
 						{
 							registers.F = (byte)(registers.F & FlagReset_Z);
 						}
+						registers.A = (byte)(result);
 						registers.PC += 1;
 					}
 					break;
