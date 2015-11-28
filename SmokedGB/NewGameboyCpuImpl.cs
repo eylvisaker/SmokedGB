@@ -4854,7 +4854,30 @@ namespace SmokedGB
 
 				case OpCode.LDHL_SP_n:
 					{
-						registers.HL = (ushort)(registers.SP + Memory[registers.PC]);
+						sbyte amount = (sbyte)(Memory[registers.PC]);
+						byte aln = (byte)(registers.SP & 0x0F);
+						byte bln = (byte)(Memory[registers.PC] & 0x0F);
+						byte alb = (byte)(registers.SP & 0xFF);
+
+						if (aln + bln > 0x0F)
+						{
+							registers.F = (byte)(registers.F | FlagSet_H);
+						}
+						else
+						{
+							registers.F = (byte)(registers.F & FlagReset_H);
+						}
+						if (alb + Memory[registers.PC] > 0xFF)
+						{
+							registers.F = (byte)(registers.F | FlagSet_C);
+						}
+						else
+						{
+							registers.F = (byte)(registers.F & FlagReset_C);
+						}
+						registers.F = (byte)(registers.F & FlagReset_Z);
+						registers.F = (byte)(registers.F & FlagReset_N);
+						registers.HL = (ushort)(registers.SP + amount);
 						registers.PC += 1;
 					}
 					break;

@@ -105,7 +105,15 @@
       <Code >%3--</Code>
     </Operation>
     <Operation Name="LoadAdd" Parameters="2" Inline="true">
-      <Code WriteTo="HL">%1+%2</Code>
+      <Variable Name="amount" Type="sbyte">%2</Variable>
+      <Variable Name="aln" Type="byte">%1 .and. $0F</Variable>
+      <Variable Name="bln" Type="byte">%2 .and. $0F</Variable>
+      <Variable Name="alb" Type="byte">%1 .and. $FF</Variable>
+      <Code Flag="!H">aln + bln &gt; $0F</Code>
+      <Code Flag="!C">alb + %2 &gt; $FF</Code>
+      <Code ResetFlag="!Z" />
+      <Code ResetFlag="!N" />
+      <Code WriteTo="HL">%1 + amount</Code>
     </Operation>
     <Operation Name="Add" Parameters="1" Inline="true">
       <Variable Name="res" Type="ushort">A + %1</Variable>
