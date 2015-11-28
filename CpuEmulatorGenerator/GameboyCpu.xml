@@ -260,6 +260,16 @@
       <Code Flag="!Z">%1 == 0</Code>
       <Code WriteTo="%1">hn .or. ln</Code>
     </Operation>
+    <Operation Name="RLCA" Parameters="0" Inline="true">
+      <Variable Name="carry" Type="byte">A .and. $80</Variable>
+      <Variable Name="inp" Type="byte">carry &gt;&gt; 7</Variable>
+      <Code ResetFlag="!N" />
+      <Code ResetFlag="!H" />
+      <Code ResetFlag="!Z" />
+      <Code WriteTo="A">A &lt;&lt; 1</Code>
+      <Code WriteTo="A">A+inp</Code>
+      <Code Flag="!C">carry</Code>
+    </Operation>
     <Operation Name="RLC" Parameters="1" Inline="true">
       <Variable Name="carry" Type="byte">%1 .and. $80</Variable>
       <Variable Name="inp" Type="byte">carry &gt;&gt; 7</Variable>
@@ -633,8 +643,10 @@
       <Op Parameters="L" Code="cb 15" Cycles="8"/>
       <Op Parameters="(HL)" Code="cb 16" Cycles="16"/>
     </OpCode>
+    <OpCode Name="rlca" Operation="RLCA">
+      <Op Parameters="" Code="07" Cycles="4"/>
+    </OpCode>
     <OpCode Name="rlc" Operation="RLC">
-      <Op Parameters="A" Code="07" Cycles="4"/>
       <Op Parameters="A" Code="cb 07" Cycles="8"/>
       <Op Parameters="B" Code="cb 00" Cycles="8"/>
       <Op Parameters="C" Code="cb 01" Cycles="8"/>

@@ -13,11 +13,11 @@ namespace SmokedGB.UnitTests.CpuTests
         [TestInitialize]
         public void Init()
         {
-            PrepareOpCode(GameboyCpu.OpCode.RLC_A);
+            PrepareOpCode(GameboyCpu.OpCode.RLCA);
         }
 
         [TestMethod]
-        public void RLCANoCarry()
+        public void RLCA_NoCarry()
         {
             Flag_C = false;
             A = 0x22;
@@ -29,7 +29,7 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
         [TestMethod]
-        public void RLCACarry()
+        public void RLCA_Carry()
         {
             Flag_C = false;
             A = 0x88;
@@ -41,7 +41,7 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
         [TestMethod]
-        public void RLCAZero()
+        public void RLCA_WithCarry()
         {
             Flag_C = false;
             A = 0x80;
@@ -53,7 +53,7 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
         [TestMethod]
-        public void RLCAWithCarry()
+        public void RLCA_Zero()
         {
             Flag_C = true;
             A = 0;
@@ -61,7 +61,7 @@ namespace SmokedGB.UnitTests.CpuTests
             cpu.Step();
 
             Assert.AreEqual(0, A);
-            VerifyFlags(H: false, C: false, Z: true, N: false);
+            VerifyFlags(H: false, C: false, Z: false, N: false);
         }
     }
 }

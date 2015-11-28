@@ -27,7 +27,7 @@ namespace SmokedGB
 			RR_A = 0x1f,
 			RRC_A = 0x0f,
 			RL_A = 0x17,
-			RLC_A = 0x07,
+			RLCA = 0x07,
 			INC_BC = 0x03,
 			INC_DE = 0x13,
 			INC_HL = 0x23,
@@ -538,7 +538,7 @@ namespace SmokedGB
 			"INC B",               // 4     0004
 			"DEC B",               // 5     0005
 			"LD B,#",              // 6     0006
-			"RLC A",               // 7     0007
+			"RLCA",                // 7     0007
 			"LD (##),SP",          // 8     0008
 			"ADD HL,BC",           // 9     0009
 			"LD A,(BC)",           // 10    000A
@@ -1780,23 +1780,16 @@ namespace SmokedGB
 					}
 					break;
 
-				case OpCode.RLC_A:
+				case OpCode.RLCA:
 					{
 						byte carry = (byte)(registers.A & 0x80);
 						byte inp = (byte)(carry >> 7);
 
 						registers.F = (byte)(registers.F & FlagReset_N);
 						registers.F = (byte)(registers.F & FlagReset_H);
+						registers.F = (byte)(registers.F & FlagReset_Z);
 						registers.A = (byte)(registers.A << 1);
 						registers.A = (byte)(registers.A + inp);
-						if (registers.A == 0)
-						{
-							registers.F = (byte)(registers.F | FlagSet_Z);
-						}
-						else
-						{
-							registers.F = (byte)(registers.F & FlagReset_Z);
-						}
 						if (0 != (carry))
 						{
 							registers.F = (byte)(registers.F | FlagSet_C);

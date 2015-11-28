@@ -823,7 +823,7 @@ namespace CpuEmulatorGenerator
 			string[] pstring = parameters.Split(paramSplitter, StringSplitOptions.RemoveEmptyEntries);
 
 			if (pstring.Length != operation.Parameters.Count)
-				throw new InvalidOperationException("OpCode does not have write number of parameters.");
+				throw new InvalidOperationException($"OpCode {operation.Name} does not have right number of parameters.");
 
 			int ptrValue = 0;
 			for(int i = 0; i < operation.Parameters.Count; i++)
