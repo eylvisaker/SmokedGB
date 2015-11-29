@@ -210,7 +210,6 @@ namespace SmokedGB
             }
 
             startTics = realClock.ElapsedTicks;
-            usCounter = 0;
 
             while (cpuCycles < end)
             {
@@ -258,14 +257,13 @@ namespace SmokedGB
                     end -= cpuCycles;
                     double us = cpuCycles * 1000000.0 / CyclesPerSecond;
 
-                    totalMs += us / 1000;
+                    totalMs += us * 0.001;
                     OnPassTime(us);
 
                     if (LimitSpeed)
                     {
                         SpeedLimiter(us);
                     }
-
                 }
             }
         }
@@ -281,15 +279,36 @@ namespace SmokedGB
 
         public event EventHandler<PassTimeEventArgs> PassTime;
 
-        double usCounter;
+        double msCounter;
+        Stopwatch limiterStopwatch = new Stopwatch();
+
         private void SpeedLimiter(double us)
         {
-            usCounter += us;
+            if (limiterStopwatch.IsRunning == false)
+            {
+                limiterStopwatch.Restart();
+                return;
+            }
 
-            double targetTicsPassed = startTics +
-                (long)((usCounter / 1000000.0) * Stopwatch.Frequency);
+            msCounter += us * 0.001;
 
-            while (realClock.ElapsedTicks < targetTicsPassed) ;
+            if (msCounter < 13)
+                return;
+
+            bool printed = false;
+
+            while (limiterStopwatch.Elapsed.TotalMilliseconds < msCounter)
+            {
+                //if (!printed)
+                //{
+                //    System.Diagnostics.Debug.Print(
+                //    $"Waiting for {ms - limiterStopwatch.Elapsed.TotalMilliseconds} milliseconds.");
+                //    printed = true;
+                //}
+            }
+
+            msCounter -= limiterStopwatch.ElapsedMilliseconds;
+            limiterStopwatch.Restart();
         }
 
         public int TimeToUpdate
@@ -460,7 +479,9 @@ namespace SmokedGB
                     F = (byte)(F & GameboyCpu.FlagReset_H);
             }
         }
-        public bool Flag_C { get { return (F & GameboyCpu.FlagSet_C) > 0; }
+        public bool Flag_C
+        {
+            get { return (F & GameboyCpu.FlagSet_C) > 0; }
             set
             {
                 if (value)
@@ -469,7 +490,9 @@ namespace SmokedGB
                     F = (byte)(F & GameboyCpu.FlagReset_C);
             }
         }
-        public bool Flag_Z { get { return (F & GameboyCpu.FlagSet_Z) > 0; }
+        public bool Flag_Z
+        {
+            get { return (F & GameboyCpu.FlagSet_Z) > 0; }
             set
             {
                 if (value)
@@ -478,7 +501,9 @@ namespace SmokedGB
                     F = (byte)(F & GameboyCpu.FlagReset_Z);
             }
         }
-        public bool Flag_N { get { return (F & GameboyCpu.FlagSet_N) > 0; }
+        public bool Flag_N
+        {
+            get { return (F & GameboyCpu.FlagSet_N) > 0; }
             set
             {
                 if (value)
