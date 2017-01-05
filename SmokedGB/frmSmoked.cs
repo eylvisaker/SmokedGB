@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using AgateLib;
+using AgateLib.InputLib;
 
 namespace SmokedGB
 {
@@ -41,7 +42,7 @@ namespace SmokedGB
 
 			RefreshRecentMenu();
 
-			AgateLib.InputLib.Legacy.Keyboard.KeyDown += new AgateLib.InputLib.Legacy.InputEventHandler(Keyboard_KeyDown);
+			Input.Unhandled.KeyDown += Keyboard_KeyDown;
 
 			SetStatus("");
 		}
@@ -51,7 +52,7 @@ namespace SmokedGB
 			status1.Text = p;
 		}
 
-		void Keyboard_KeyDown(AgateLib.InputLib.Legacy.InputEventArgs e)
+		void Keyboard_KeyDown(object sender, AgateInputEventArgs e)
 		{
 			switch (e.KeyCode)
 			{
@@ -696,13 +697,16 @@ namespace SmokedGB
 
 		private void lstMemory_Resize(object sender, EventArgs e)
 		{
-			Graphics g = lstMemory.CreateGraphics();
+			if (dasmFont != null)
+			{
+				Graphics g = lstMemory.CreateGraphics();
 
-			float fontHeight = g.MeasureString("M", dasmFont).Height;
+				float fontHeight = g.MeasureString("M", dasmFont).Height;
 
-			int lines = (int)(lstMemory.Height / fontHeight);
+				int lines = (int)(lstMemory.Height / fontHeight);
 
-			vsbMemory.LargeChange = lines;
+				vsbMemory.LargeChange = lines;
+			}
 		}
 
 		private void vsbMemory_Scroll(object sender, ScrollEventArgs e)

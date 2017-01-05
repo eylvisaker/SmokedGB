@@ -8,6 +8,7 @@ using AgateLib.InputLib;
 using AgateLib.Geometry;
 using AgateLib.InputLib.Legacy;
 using AgateLib.Platform.WinForms.ApplicationModels;
+using AgateLib.Platform.WinForms;
 
 namespace SmokedGB
 {
@@ -22,10 +23,13 @@ namespace SmokedGB
 			Application.SetCompatibleTextRenderingDefault(true);
 			Application.EnableVisualStyles();
 
-			new PassiveModel(args).Run(() =>
+			using (var setup = new AgateSetupWinForms(args))
 			{
+				setup.CreateDisplayWindow = false;
+				setup.InitializeAgateLib();
+
 				new SmokedGB().Run();
-			});
+			}
 		}
 
 		Gameboy gmb;
@@ -47,8 +51,8 @@ namespace SmokedGB
 
 			DisplayWindow wind = DisplayWindow.CreateFromControl(frm.RenderTarget);
 
-			Keyboard.KeyDown += new InputEventHandler(Keyboard_KeyDown);
-			Keyboard.KeyUp += new InputEventHandler(Keyboard_KeyUp);
+			Input.Unhandled.KeyDown += Keyboard_KeyDown;
+			Input.Unhandled.KeyUp += Keyboard_KeyUp;
 			gmb = new Gameboy();
 			frm.Show();
 			frm.Gmb = gmb;
@@ -65,7 +69,7 @@ namespace SmokedGB
 			}
 		}
 
-		void Keyboard_KeyUp(InputEventArgs e)
+		void Keyboard_KeyUp(object sender, AgateInputEventArgs e)
 		{
 			if (gmb.Cpu == null)
 				return;
@@ -81,7 +85,7 @@ namespace SmokedGB
 				gmb.Cpu.LimitSpeed = true;
 			}
 		}
-		void Keyboard_KeyDown(InputEventArgs e)
+		void Keyboard_KeyDown(object sender, AgateInputEventArgs e)
 		{
 			if (gmb.Cpu == null)
 				return;
