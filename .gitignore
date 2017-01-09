@@ -5,3 +5,4 @@ SmokedGB.sln.ide/
 *.nupkg
 **/packages/*
 !**/packages/build/
+.vs/

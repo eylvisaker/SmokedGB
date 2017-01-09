@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		Build.bat = Build.bat
 		Coverage.bat = Coverage.bat
-		sonar-project.properties = sonar-project.properties
+		IntegrationTest.bat = IntegrationTest.bat
 		UnitTest.bat = UnitTest.bat
 	EndProjectSection
 EndProject
