@@ -7,7 +7,6 @@ using AgateLib.DisplayLib;
 using AgateLib.InputLib;
 using AgateLib.Geometry;
 using AgateLib.InputLib.Legacy;
-using AgateLib.Platform.WinForms.ApplicationModels;
 using AgateLib.Platform.WinForms;
 
 namespace SmokedGB
@@ -23,7 +22,7 @@ namespace SmokedGB
 			Application.SetCompatibleTextRenderingDefault(true);
 			Application.EnableVisualStyles();
 
-			using (var setup = new AgateSetupWinForms(args))
+			using (var setup = new AgateSetup(args))
 			{
 				setup.CreateDisplayWindow = false;
 				setup.InitializeAgateLib();
