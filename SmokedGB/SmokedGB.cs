@@ -22,11 +22,8 @@ namespace SmokedGB
 			Application.SetCompatibleTextRenderingDefault(true);
 			Application.EnableVisualStyles();
 
-			using (var setup = new AgateSetup(args))
+			using (AgateWinForms.Initialize(args))
 			{
-				setup.CreateDisplayWindow = false;
-				setup.InitializeAgateLib();
-
 				new SmokedGB().Run();
 			}
 		}
@@ -48,10 +45,13 @@ namespace SmokedGB
 
 			frmSmoked frm = new frmSmoked();
 
-			DisplayWindow wind = DisplayWindow.CreateFromControl(frm.RenderTarget);
+			DisplayWindow wind = new DisplayWindowBuilder()
+				.RenderToControl(frm.RenderTarget)
+				.Build();
 
 			Input.Unhandled.KeyDown += Keyboard_KeyDown;
 			Input.Unhandled.KeyUp += Keyboard_KeyUp;
+
 			gmb = new Gameboy();
 			frm.Show();
 			frm.Gmb = gmb;
@@ -64,7 +64,7 @@ namespace SmokedGB
 				gmb.DrawScreen();
 
 				Display.EndFrame();
-				Core.KeepAlive();
+				AgateApp.KeepAlive();
 			}
 		}
 

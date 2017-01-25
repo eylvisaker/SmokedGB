@@ -28,7 +28,7 @@ namespace SmokedGB
 
 			lstMemory_Resize(this, EventArgs.Empty);
 
-			var setRecentList = AgateLib.Core.Settings["Recent"];
+			var setRecentList = AgateApp.Settings["Recent"];
 			
 			for (int i = 0; i < recentCount; i++)
 			{
@@ -90,13 +90,13 @@ namespace SmokedGB
 
 		private void SaveRecentList()
 		{
-			var setRecentList = Core.Settings["Recent"];
+			var setRecentList = AgateApp.Settings["Recent"];
 			setRecentList.Clear();
 
 			for (int i = 0; i < recentList.Count; i++)
 				setRecentList["Recent" + (i).ToString()] = recentList[i];
 
-			Core.Settings.SaveSettings();
+			AgateApp.Settings.SaveSettings();
 		}
 
 
