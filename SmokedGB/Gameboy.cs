@@ -123,10 +123,9 @@ namespace SmokedGB
 		{
 			EndThread();
 
-			Cpu.Memory.CopyMemoryToSaveRam();
+			Cpu?.Memory?.CopyMemoryToSaveRam();
 
-			if (rom != null)
-				rom.Dispose();
+			rom?.Dispose();
 
 			aud.StopAudio();
 		}

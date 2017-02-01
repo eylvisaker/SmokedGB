@@ -19,6 +19,8 @@
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,20 +64,20 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AgateLib, Version=2.0.105.17024, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AgateLib.2.0.105.17024\lib\portable45-net45+win8+wp8+wpa81\AgateLib.dll</HintPath>
+    <Reference Include="AgateLib, Version=2.0.119.17031, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AgateLib.2.0.119.17031\lib\portable45-net45+win8+wp8+wpa81\AgateLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AgateLib.OpenGL, Version=2.0.105.17024, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AgateLib.OpenGL.2.0.105.17024\lib\net451\AgateLib.OpenGL.dll</HintPath>
+    <Reference Include="AgateLib.OpenGL, Version=2.0.119.17031, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AgateLib.OpenGL.2.0.119.17031\lib\net451\AgateLib.OpenGL.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AgateLib.Platform.WinForms, Version=2.0.105.17024, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AgateLib.Platform.WinForms.2.0.105.17024\lib\net451\AgateLib.Platform.WinForms.dll</HintPath>
+    <Reference Include="AgateLib.Platform.WinForms, Version=2.0.119.17031, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AgateLib.Platform.WinForms.2.0.119.17031\lib\net451\AgateLib.Platform.WinForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AgateLib.SDL, Version=2.0.105.17024, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AgateLib.SDL.2.0.105.17024\lib\net451\AgateLib.SDL.dll</HintPath>
+    <Reference Include="AgateLib.SDL, Version=2.0.119.17031, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AgateLib.SDL.2.0.119.17031\lib\net451\AgateLib.SDL.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
@@ -97,8 +99,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.4.0.0\lib\net35\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.4.1.0\lib\net35\YamlDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -155,7 +157,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="OpenTK.dll.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\ip.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -177,102 +181,17 @@
     <Content Include="Information\Mbc3.txt" />
     <Content Include="Information\Program.txt" />
     <Content Include="Information\sgb.txt" />
-    <Content Include="lib32\libFLAC-8.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\libmikmod-2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\libmodplug-1.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\libogg-0.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\libvorbis-0.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\libvorbisfile-3.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\LICENSE.FLAC.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\LICENSE.mikmod.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\LICENSE.modplug.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\LICENSE.ogg-vorbis.txt" />
-    <Content Include="lib32\LICENSE.smpeg.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\README-SDL.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\README-SDL_mixer.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\SDL2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\SDL2_mixer.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib32\smpeg2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\libFLAC-8.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\libmikmod-2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\libmodplug-1.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\libogg-0.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\libvorbis-0.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\libvorbisfile-3.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\LICENSE.FLAC.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\LICENSE.mikmod.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\LICENSE.modplug.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\LICENSE.ogg-vorbis.txt" />
-    <Content Include="lib64\LICENSE.smpeg.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\Readme-SDL.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\README-SDL_mixer.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\SDL2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\SDL2_mixer.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib64\smpeg2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="smoked.ico" />
     <Content Include="TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\AgateLib.SDL.2.0.119.17031\build\AgateLib.SDL.targets" Condition="Exists('..\packages\AgateLib.SDL.2.0.119.17031\build\AgateLib.SDL.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\AgateLib.SDL.2.0.119.17031\build\AgateLib.SDL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AgateLib.SDL.2.0.119.17031\build\AgateLib.SDL.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
