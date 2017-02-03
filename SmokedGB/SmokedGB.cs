@@ -22,7 +22,7 @@ namespace SmokedGB
 			Application.SetCompatibleTextRenderingDefault(true);
 			Application.EnableVisualStyles();
 
-			using (AgateWinForms.Initialize(args))
+			using (new AgateWinForms(args).Initialize())
 			{
 				new SmokedGB().Run();
 			}

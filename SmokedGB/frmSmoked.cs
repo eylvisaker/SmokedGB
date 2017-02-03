@@ -14,11 +14,16 @@ namespace SmokedGB
 {
 	public partial class frmSmoked : Form
 	{
+		class SmokedSettings
+		{
+			public List<string> RecentItems { get; set; } = new List<string>();
+		}
+
 		Gameboy gmb;
 		bool stopCpu;
 		bool breakAtInterrupt;
 		int recentCount = 6;
-		List<string> recentList = new List<string>();
+		private SmokedSettings settings;
 		List<int> breakpoints = new List<int>();
 
 		public frmSmoked()
@@ -28,17 +33,7 @@ namespace SmokedGB
 
 			lstMemory_Resize(this, EventArgs.Empty);
 
-			var setRecentList = AgateApp.Settings["Recent"];
-			
-			for (int i = 0; i < recentCount; i++)
-			{
-				string str = "Recent" + i.ToString();
-
-				if (setRecentList.ContainsKey(str))
-				{
-					recentList.Add(setRecentList[str]);
-				}
-			}
+			settings = AgateApp.Settings.GetOrCreate<SmokedSettings>("Recent", () => new SmokedSettings());
 
 			RefreshRecentMenu();
 
@@ -64,9 +59,9 @@ namespace SmokedGB
 				case AgateLib.InputLib.KeyCode.D6:
 					int i = e.KeyCode - AgateLib.InputLib.KeyCode.D1;
 
-					if (recentList.Count > i)
+					if (settings.RecentItems.Count > i)
 					{
-						OpenRom(recentList[i]);
+						OpenRom(settings.RecentItems[i]);
 					}
 					break;
 
@@ -77,10 +72,10 @@ namespace SmokedGB
 		{
 			recentToolStripMenuItem.DropDownItems.Clear();
 
-			for (int i = 0; i < recentList.Count; i++)
+			for (int i = 0; i < settings.RecentItems.Count; i++)
 			{
-				var x = new ToolStripMenuItem(recentList[i]);
-				x.Tag = recentList[i];
+				var x = new ToolStripMenuItem(settings.RecentItems[i]);
+				x.Tag = settings.RecentItems[i];
 				x.Click += recentMenu_Click;
 
 				recentToolStripMenuItem.DropDownItems.Add(x);
@@ -90,13 +85,7 @@ namespace SmokedGB
 
 		private void SaveRecentList()
 		{
-			var setRecentList = AgateApp.Settings["Recent"];
-			setRecentList.Clear();
-
-			for (int i = 0; i < recentList.Count; i++)
-				setRecentList["Recent" + (i).ToString()] = recentList[i];
-
-			AgateApp.Settings.SaveSettings();
+			AgateApp.Settings.Save();
 		}
 
 
@@ -112,7 +101,7 @@ namespace SmokedGB
 			set
 			{
 				gmb = value;
-				gmb.Cpu.Debug += new DebugHandler(Cpu_Debug);
+				gmb.Cpu.Debug += Cpu_Debug;
 
 			}
 		}
@@ -580,10 +569,10 @@ namespace SmokedGB
 
 		private void OpenRom(string filename)
 		{
-			if (recentList.Contains(filename))
-				recentList.Remove(filename);
+			if (settings.RecentItems.Contains(filename))
+				settings.RecentItems.Remove(filename);
 
-			recentList.Insert(0, filename);
+			settings.RecentItems.Insert(0, filename);
 			SaveRecentList();
 			RefreshRecentMenu();
 
