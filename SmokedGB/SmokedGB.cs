@@ -5,8 +5,6 @@ using System.Windows.Forms;
 using AgateLib;
 using AgateLib.DisplayLib;
 using AgateLib.InputLib;
-using AgateLib.Geometry;
-using AgateLib.InputLib.Legacy;
 using AgateLib.Platform.WinForms;
 
 namespace SmokedGB

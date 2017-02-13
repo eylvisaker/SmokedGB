@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AgateLib;
 using AgateLib.DisplayLib;
-using AgateLib.Geometry;
+using AgateLib.Mathematics.Geometry;
 
 namespace SmokedGB
 {
