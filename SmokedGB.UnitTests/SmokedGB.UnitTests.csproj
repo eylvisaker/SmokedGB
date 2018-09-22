@@ -36,14 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AgateLib, Version=2.0.147.17043, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AgateLib.2.0.147.17043\lib\portable45-net45+win8+wp8+wpa81\AgateLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AgateLib.Platform.Test, Version=2.0.147.17043, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AgateLib.Platform.Test.2.0.147.17043\lib\portable45-net45+win8+wp8+wpa81\AgateLib.Platform.Test.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
@@ -91,6 +83,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AgateLib\AgateLib.Platform.Test\AgateLib.Platform.Test.csproj">
+      <Project>{8092e103-5700-4d09-b315-192f0e792c45}</Project>
+      <Name>AgateLib.Platform.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AgateLib\AgateLib\AgateLib.csproj">
+      <Project>{9490b719-829e-43a7-a5fe-8001f8a81759}</Project>
+      <Name>AgateLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SmokedGB\SmokedGB.csproj">
       <Project>{1fe27ec5-f81b-4463-b4ca-65c158e35286}</Project>
       <Name>SmokedGB</Name>

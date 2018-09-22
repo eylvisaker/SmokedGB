@@ -1,0 +1,36 @@
+     GameBoy Assembly Language Tutor, V1.1, by kOOPa
+     -----------------------------------------------
+
+ Since books on the Z80 are getting harder & harder to find,
+hopefully the information here might be helpful to those
+trying to understand assembly language specific to GameBoy.
+
+
+ AND A    ->    a = a and a,     a = a & a
+
+                This command clears the Carry flag and sets
+                the Zero flag if a = 0. A itself is unaffected.
+
+ cp #     ->    NA               NA
+
+                Here # can be a register or immediate byte value.
+                A is compared to #. If A = #, Zero flag is set.
+                If A < #, Carry is set & Zero is reset.
+                If A > #, Carry is reset & Zero is reset.
+
+ or a     ->    a = a or a,      a = a | a
+
+                Same result as 'and a'.
+                ('and a' and 'or a' are often used to see if
+                a = 0 since they are smaller in size than
+                using 'cp 0' to do the same thing.) 
+
+ xor a   ->     a = a xor a,      a = a ^ a
+
+                This command clears the Carry flag and sets
+                the Zero flag. A is set equal to zero.
+                (This command is often used in place of
+                'ld a,0' since it is one byte smaller code.)
+
+
+

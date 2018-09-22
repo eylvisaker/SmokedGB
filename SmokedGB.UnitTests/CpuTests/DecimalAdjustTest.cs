@@ -101,11 +101,6 @@ namespace SmokedGB.UnitTests.CpuTests
                     Flag_C = (bcd_i & 0xf0) < (bcd_j & 0xf0) + (Flag_H ? 0x10 : 0);
                     bool C = Flag_C;
 
-                    if (i == 0 && j == 1)
-                    {
-                        int k = 4;
-                    }
-
                     cpu.Step();
                     PC = 0x100;
 

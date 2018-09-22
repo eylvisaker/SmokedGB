@@ -100,7 +100,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\SmokedGB\SmokedGB.licenseheader">
+      <Link>SmokedGB.licenseheader</Link>
+    </None>
     <None Include="app.config" />
+    <None Include="CpuEmulatorGenerator.licenseheader" />
     <None Include="GmbCpu.cpu">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
