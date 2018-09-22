@@ -12,10 +12,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8ADBADD-20EB-4F2F-8DFB-348EE8FC5F3D}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		Build-All.bat = Build-All.bat
 		Build.bat = Build.bat
+		Build.ps1 = Build.ps1
 		COPYING.txt = COPYING.txt
 		Coverage.bat = Coverage.bat
+		deploy.sh = deploy.sh
 		IntegrationTest.bat = IntegrationTest.bat
+		Package.bat = Package.bat
+		Package.ps1 = Package.ps1
 		UnitTest.bat = UnitTest.bat
 	EndProjectSection
 EndProject

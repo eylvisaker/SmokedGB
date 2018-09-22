@@ -1,22 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class AddBTest : CpuTest
     {
-        [TestInitialize]
-        public void Initialize()
+        public AddBTest()
         {
             PrepareOpCode(GameboyCpu.OpCode.ADD_B);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddB()
         {
             A = 1;
@@ -28,7 +26,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(false, false, false, false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddBHalfCarry()
         {
             A = 8;
@@ -40,7 +38,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(true, false, false, false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddBLargeNoCarry()
         {
             registers.A = 0x11;
@@ -52,7 +50,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddBFullCarryAndHalfCarry()
         {
             registers.A = 0xFF;
@@ -63,7 +61,7 @@ namespace SmokedGB.UnitTests.CpuTests
             Assert.AreEqual(0x18, registers.A);
             VerifyFlags(H: true, C: true, Z: false, N: false);
         }
-        [TestMethod]
+        [Fact]
         public void AddBFullCarryNoHalfCarry()
         {
             registers.A = 0xF0;
@@ -75,7 +73,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: true, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddBZero()
         {
             registers.A = 0xFA;

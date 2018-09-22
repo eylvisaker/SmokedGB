@@ -1,42 +1,21 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class DecimalAdjustTest : CpuTest
     {
-        [TestInitialize]
-        public void Initialize()
+        public DecimalAdjustTest()
         {
             PC = 0x100;
             PrepareOpCode(GameboyCpu.OpCode.DAA);
         }
 
-        int ToBcd(int value)
-        {
-            int result = 0;
-            int v = value;
-            int digits = 0;
-
-            while (v > 0)
-            {
-                int d = v % 10;
-                d <<= 4 * digits;
-
-                result |= d;
-                v /= 10;
-                digits++;
-            }
-
-            return result;
-        }
-
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_AllAddition()
         {
             StringBuilder failure = new StringBuilder();
@@ -77,7 +56,7 @@ namespace SmokedGB.UnitTests.CpuTests
             Assert.IsTrue(failure.Length == 0, failure.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_AllSubtraction()
         {
             StringBuilder failure = new StringBuilder();
@@ -121,7 +100,7 @@ namespace SmokedGB.UnitTests.CpuTests
             Assert.IsTrue(failure.Length == 0, failure.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_15_27()
         {
             A = 0x15 + 0x27;
@@ -134,7 +113,7 @@ namespace SmokedGB.UnitTests.CpuTests
             Assert.AreEqual(0x42, A);
         }
 
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_15()
         {
             A = 0x0f;
@@ -147,7 +126,7 @@ namespace SmokedGB.UnitTests.CpuTests
             Assert.AreEqual(0x15, A);
         }
 
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_16()
         {
             A = 0x10;
@@ -160,7 +139,7 @@ namespace SmokedGB.UnitTests.CpuTests
             Assert.AreEqual(0x16, A);
         }
 
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_70_C()
         {
             A = 0x10;
@@ -173,7 +152,7 @@ namespace SmokedGB.UnitTests.CpuTests
             Assert.AreEqual(0x70, A);
         }
 
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_N_90()
         {
             A = 0xf0;
@@ -187,7 +166,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: true, Z: false, N: true);
         }
 
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_N_8()
         {
             A = 0x0e;
@@ -201,7 +180,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: true);
         }
 
-        [TestMethod]
+        [Fact]
         public void DecimalAdjust_()
         {
             A = 0x33;
@@ -212,5 +191,25 @@ namespace SmokedGB.UnitTests.CpuTests
 
             Assert.AreEqual(0x99, A);
         }
+
+        int ToBcd(int value)
+        {
+            int result = 0;
+            int v = value;
+            int digits = 0;
+
+            while (v > 0)
+            {
+                int d = v % 10;
+                d <<= 4 * digits;
+
+                result |= d;
+                v /= 10;
+                digits++;
+            }
+
+            return result;
+        }
+
     }
 }

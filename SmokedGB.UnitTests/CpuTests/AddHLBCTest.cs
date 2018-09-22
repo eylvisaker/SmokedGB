@@ -1,22 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class AddHLBCTest : CpuTest
     {
-        [TestInitialize]
-        public void Init()
+        public AddHLBCTest()
         {
             PrepareOpCode(GameboyCpu.OpCode.ADD_HL_BC);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddHLBC_NoCarry()
         {
             Flag_Z = false;
@@ -30,7 +28,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddHLBC_HalfCarry()
         {
             Flag_Z = false;
@@ -44,7 +42,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: true, C: false, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddHLBC_LargeButNoHalfCarry()
         {
             Flag_Z = false;
@@ -58,7 +56,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddHLBC_FullCarry()
         {
             Flag_Z = false;
@@ -72,7 +70,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: true, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddHLBC_FullAndHalfCarry()
         {
             Flag_Z = false;

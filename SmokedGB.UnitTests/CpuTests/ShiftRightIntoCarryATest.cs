@@ -1,22 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class ShiftRightIntoCarryATest : CpuTest
     {
-        [TestInitialize]
-        public void Init()
+        public ShiftRightIntoCarryATest()
         {
             PrepareOpCode(GameboyCpu.OpCodeCB.SRL_A);
         }
 
-        [TestMethod]
+        [Fact]
         public void SRL_A_1()
         {
             A = 1;
@@ -27,7 +25,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: true, Z: true, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void SRL_A_128()
         {
             A = 128;
@@ -39,7 +37,7 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void SRL_A_255()
         {
             A = 255;

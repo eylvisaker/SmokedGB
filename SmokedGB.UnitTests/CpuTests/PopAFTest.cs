@@ -1,23 +1,21 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class PopAFTest : CpuTest
     {
-        [TestInitialize]
-        public void Init()
+        public PopAFTest()
         {
             SP = 0xd000;
             PrepareOpCode(GameboyCpu.OpCode.POP_AF);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopAF()
         {
             memory[SP] = 0x00;
@@ -28,7 +26,7 @@ namespace SmokedGB.UnitTests.CpuTests
             Assert.AreEqual(0x1200, AF);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopAFClearF()
         {
             memory[SP] = 0xFF;

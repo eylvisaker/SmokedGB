@@ -1,17 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class AddSPTest : CpuTest
     {
-        [TestInitialize]
-        public void Initialize()
+        public AddSPTest()
         {
             Flag_H = false;
             Flag_C = false;
@@ -19,7 +17,7 @@ namespace SmokedGB.UnitTests.CpuTests
             PrepareOpCode(GameboyCpu.OpCode.ADD_SP_n, 0x78);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddSP()
         {
             SP = 0x500;
@@ -30,7 +28,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddSP_Negative()
         {
             SP = 0x500;
@@ -42,7 +40,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddSP_Carry()
         {
             SP = 0x5F0;
@@ -54,7 +52,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: true, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddSP_HalfCarry()
         {
             SP = 0x50F;
@@ -66,7 +64,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: true, C: false, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddSP_BothCarry()
         {
             SP = 0x5FF;

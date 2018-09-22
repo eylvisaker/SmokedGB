@@ -1,22 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class LoadHLSPTest : CpuTest
     {
-        [TestInitialize]
-        public void Initialize()
+        public LoadHLSPTest()
         {
             SP = 0x2000;
         }
 
-        [TestMethod]
+        [Fact]
         public void LD_HL_SP_Positive()
         {
             PrepareOpCode(GameboyCpu.OpCode.LDHL_SP_n, 0x0A);
@@ -28,7 +26,7 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void LD_HL_SP_Negative()
         {
             PrepareOpCode(GameboyCpu.OpCode.LDHL_SP_n, 0xFF);

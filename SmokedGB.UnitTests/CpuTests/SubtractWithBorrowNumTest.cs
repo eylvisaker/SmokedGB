@@ -1,22 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class SubtractWithBorrowNumTest : CpuTest
     {
-        [TestInitialize]
-        public void Initialize()
+        public SubtractWithBorrowNumTest()
         {
             Flag_C = false;
         }
 
-        [TestMethod]
+        [Fact]
         public void SBC_A_n_Zero()
         {
             PrepareOpCode(GameboyCpu.OpCode.SBC_n, 0);
@@ -29,7 +27,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: true);
         }
 
-        [TestMethod]
+        [Fact]
         public void SBC_A_n_SmallWithoutBorrow()
         {
             PrepareOpCode(GameboyCpu.OpCode.SBC_n, 3);
@@ -42,7 +40,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: true);
         }
 
-        [TestMethod]
+        [Fact]
         public void SBC_A_n_SmallWithBorrow()
         {
             PrepareOpCode(GameboyCpu.OpCode.SBC_n, 3);
@@ -57,7 +55,7 @@ namespace SmokedGB.UnitTests.CpuTests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void SBC_A_n_ToNegativeWithoutBorrow()
         {
             PrepareOpCode(GameboyCpu.OpCode.SBC_n, 3);
@@ -70,7 +68,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
 
-        [TestMethod]
+        [Fact]
         public void SBC_A_n_ToNegativeWithBorrow()
         {
             PrepareOpCode(GameboyCpu.OpCode.SBC_n, 3);
@@ -84,7 +82,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
 
-        [TestMethod]
+        [Fact]
         public void SBC_A_n_HalfBorrow()
         {
             PrepareOpCode(GameboyCpu.OpCode.SBC_n, 0xf);
@@ -97,7 +95,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
 
-        [TestMethod]
+        [Fact]
         public void SBC_A_n_HalfBorrowWithBorrow()
         {
             PrepareOpCode(GameboyCpu.OpCode.SBC_n, 0xf);
@@ -111,7 +109,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
 
-        [TestMethod]
+        [Fact]
         public void SBC_A_n_ByteMax()
         {
             PrepareOpCode(GameboyCpu.OpCode.SBC_n, 0xff);

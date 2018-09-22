@@ -1,22 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace SmokedGB.UnitTests.CpuTests
 {
-    [TestClass]
     public class RotateRightATest : CpuTest
     {
-        [TestInitialize]
-        public void Init()
+        public RotateRightATest()
         {
             PrepareOpCode(GameboyCpu.OpCode.RRA);
         }
 
-        [TestMethod]
+        [Fact]
         public void RRA_NoCarry()
         {
             Flag_C = false;
@@ -28,7 +26,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: false, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void RRA_Carry()
         {
             Flag_C = false;
@@ -40,7 +38,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: true, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void RRA_Zero()
         {
             Flag_C = false;
@@ -52,7 +50,7 @@ namespace SmokedGB.UnitTests.CpuTests
             VerifyFlags(H: false, C: true, Z: false, N: false);
         }
 
-        [TestMethod]
+        [Fact]
         public void RRA_WithCarry()
         {
             Flag_C = true;
