@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using SmokedGB.UnitTests.Fakes;
 
 namespace SmokedGB.UnitTests.CpuTests
@@ -43,10 +44,10 @@ namespace SmokedGB.UnitTests.CpuTests
 
         protected void VerifyFlags(bool? H = null, bool? C = null, bool? Z = null, bool? N = null)
         {
-            if (H != null) Assert.AreEqual(H, registers.Flag_H, "Flag H was not expected value.");
-            if (C != null) Assert.AreEqual(C, registers.Flag_C, "Flag C was not expected value.");
-            if (Z != null) Assert.AreEqual(Z, registers.Flag_Z, "Flag Z was not expected value.");
-            if (N != null) Assert.AreEqual(N, registers.Flag_N, "Flag N was not expected value.");
+            if (H != null) registers.Flag_H.Should().Be(H.Value, "Flag H was not expected value.");
+            if (C != null) registers.Flag_C.Should().Be(C.Value, "Flag C was not expected value.");
+            if (Z != null) registers.Flag_Z.Should().Be(Z.Value, "Flag Z was not expected value.");
+            if (N != null) registers.Flag_N.Should().Be(N.Value, "Flag N was not expected value.");
         }
 
         public byte A { get { return registers.A; } set { registers.A = value; } }

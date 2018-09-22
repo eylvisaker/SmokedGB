@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,7 +54,7 @@ namespace SmokedGB.UnitTests.CpuTests
                 }
             }
 
-            Assert.IsTrue(failure.Length == 0, failure.ToString());
+            failure.Length.Should().Be(0, failure.ToString());
         }
 
         [Fact]
@@ -97,7 +98,7 @@ namespace SmokedGB.UnitTests.CpuTests
                 }
             }
 
-            Assert.IsTrue(failure.Length == 0, failure.ToString());
+            failure.Length.Should().Be(0, failure.ToString());
         }
 
         [Fact]
@@ -110,7 +111,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x42, A);
+            A.Should().Be(0x42);
         }
 
         [Fact]
@@ -123,7 +124,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x15, A);
+            A.Should().Be(0x15);
         }
 
         [Fact]
@@ -136,7 +137,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x16, A);
+            A.Should().Be(0x16);
         }
 
         [Fact]
@@ -149,7 +150,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x70, A);
+            A.Should().Be(0x70);
         }
 
         [Fact]
@@ -162,7 +163,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x90, A);
+            A.Should().Be(0x90);
             VerifyFlags(H: false, C: true, Z: false, N: true);
         }
 
@@ -176,7 +177,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x08, A);
+            A.Should().Be(0x08);
             VerifyFlags(H: false, C: false, Z: false, N: true);
         }
 
@@ -189,7 +190,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x99, A);
+            A.Should().Be(0x99);
         }
 
         int ToBcd(int value)

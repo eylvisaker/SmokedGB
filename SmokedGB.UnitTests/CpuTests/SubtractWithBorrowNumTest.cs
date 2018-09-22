@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x10, A);
+            A.Should().Be(0x10);
             VerifyFlags(H: false, C: false, Z: false, N: true);
         }
 
@@ -36,7 +37,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x4, A);
+            A.Should().Be(0x4);
             VerifyFlags(H: false, C: false, Z: false, N: true);
         }
 
@@ -50,7 +51,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0x3, A);
+            A.Should().Be(0x3);
             VerifyFlags(H: false, C: false, Z: false, N: true);
         }
 
@@ -64,7 +65,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0xFE, A);
+            A.Should().Be(0xFE);
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
 
@@ -78,7 +79,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0xFD, A);
+            A.Should().Be(0xFD);
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
 
@@ -91,7 +92,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0xFF, A);
+            A.Should().Be(0xFF);
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
 
@@ -105,7 +106,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0xFF, A);
+            A.Should().Be(0xFF);
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
 
@@ -119,7 +120,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0xe, A);
+            A.Should().Be(0xe);
             VerifyFlags(H: true, C: true, Z: false, N: true);
         }
     }

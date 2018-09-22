@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,8 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(targetAddr, PC, "Program counter did not jump to the right location.");
-            Assert.AreEqual(0x0101, PeekStack16(), "Stack contained ${0:X4} which was not the correct return address of ${1:X4}.", PeekStack16(), 0x0103);
+            PC.Should().Be(targetAddr, "Program counter did not jump to the right location.");
+            PeekStack16().Should().Be(0x0101);
         }
 
         [Fact]

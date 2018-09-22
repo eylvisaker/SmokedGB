@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(0, A);
+            A.Should().Be(0);
             VerifyFlags(H: false, C: true, Z: true, N: false);
         }
 
@@ -32,7 +33,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(64, A);
+            A.Should().Be(64);
             VerifyFlags(H: false, C: false, Z: false, N: false);
         }
 
@@ -44,7 +45,7 @@ namespace SmokedGB.UnitTests.CpuTests
 
             cpu.Step();
 
-            Assert.AreEqual(127, A);
+            A.Should().Be(127);
             VerifyFlags(H: false, C: true, Z: false, N: false);
         }
     }
