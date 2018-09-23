@@ -6,3 +6,5 @@ SmokedGB.sln.ide/
 **/packages/*
 !**/packages/build/
 .vs/
+/TestReport
+/Coverage.xml
