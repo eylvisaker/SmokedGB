@@ -14,14 +14,13 @@ function CreatePackage($sourceDir, $packageName)
 	
 	"Creating $destination"
 	[IO.Compression.ZipFile]::CreateFromDirectory($sourceDir, $destination)
-	
 }
 
 Add-Type -assembly "System.IO.Compression.FileSystem"
 
 $dummy = New-Item -ItemType Directory -Force -Path $destDir
 
-CreatePackage Thornbridge.WindowsDX\bin\Release "ThornbridgeSaga_Windows$version"
+CreatePackage SmokedGB\bin\Release "SmokedGB_Windows$version"
 CreatePackage Thornbridge.WindowsUniversal\bin\x64\Release "ThornbridgeSaga_XBoxOne$version"
 CreatePackage Thornbridge.Android\bin\Android\AnyCPU\Release "ThornbridgeSaga_Android$version"
 
